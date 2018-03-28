@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.0.0 (2018-03-18)
+ * vue-svg-inline-loader v1.0.1 (2018-03-28)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -53,8 +53,8 @@ const PATTERN_TEMPLATE_ROOT_OPEN_TAG = /(<template>\s*<[\s\S]+?>)([\s\S]*<\/temp
 const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[\?#][^"']*)?["'][^>]*\/?>/gi;
 const PATTERN_SVG_CONTENT = /(<svg[^>]*>)([\s\S]*)(<\/svg>)/i;
 const PATTERN_SVG_OPEN_TAG = /^<svg/i;
-const PATTERN_ATTRIBUTES = /\s*([^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
-const PATTERN_ATTRIBUTE_NAME = /^[a-z][a-z-]+[a-z]$/i;
+const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
+const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
 const PATTERN_TAG = /^<|>$/;
 
 /* export loader */
