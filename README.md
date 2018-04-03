@@ -18,10 +18,10 @@
 ## Install
 
 Via [npm](https://npmjs.com/) [[package](https://www.npmjs.com/package/vue-svg-inline-loader)]:
-> `npm install vue-svg-inline-loader  --save-dev`
+> `npm install vue-svg-inline-loader --save-dev`
 
 Via [yarn](https://yarnpkg.com/en/) [[package](https://yarnpkg.com/en/package/vue-svg-inline-loader)]:
-> `yarn add vue-svg-inline-loader  --save-dev`
+> `yarn add vue-svg-inline-loader --dev`
 
 ## Usage
 
