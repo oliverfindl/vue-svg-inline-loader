@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.0.2 (2018-04-03)
+ * vue-svg-inline-loader v1.0.3 (2018-06-13)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -93,7 +93,7 @@ module.exports = function(content) {
 	replace(content, PATTERN_IMAGE_SRC_SVG, async (image, source) => {
 
 		/* check for keyword in strict mode */
-		if(options.strict && !PATTERN_INLINE_KEYWORD.test(image)) {
+		if(options.inlineStrict && !PATTERN_INLINE_KEYWORD.test(image)) {
 			return image;
 		}
 
@@ -174,7 +174,7 @@ module.exports = function(content) {
 			symbols = Array.from(new Set(symbols));
 
 			/* add symbols wrapper */
-			symbols.unshift("<div style=\"display:none;\"><svg><symbols>");
+			symbols.unshift("<div style=\"display: none;\"><svg><symbols>");
 			symbols.push("</symbols></svg></div>");
 
 			/* return replaced content with symbols injected */

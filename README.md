@@ -18,10 +18,14 @@
 ## Install
 
 Via [npm](https://npmjs.com/) [[package](https://www.npmjs.com/package/vue-svg-inline-loader)]:
-> `npm install vue-svg-inline-loader --save-dev`
+```bash
+$ npm install vue-svg-inline-loader --save-dev
+```
 
 Via [yarn](https://yarnpkg.com/en/) [[package](https://yarnpkg.com/en/package/vue-svg-inline-loader)]:
-> `yarn add vue-svg-inline-loader --dev`
+```bash
+$ yarn add vue-svg-inline-loader --dev
+```
 
 ## Usage
 
@@ -59,7 +63,7 @@ Or if you want to use inline sprites:
 Which replaces into inline SVG using inline sprites:
 ```xml
 <!-- will get injected right after root opening tag in Vue component -->
-<div style="display:none!important;">
+<div style="display: none;">
 	<svg>
 		<symbols>
 			<symbol id="svg-sprite-example">
