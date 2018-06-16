@@ -1,5 +1,3 @@
-
-
 # vue-svg-inline-loader
 
 [![npm](https://img.shields.io/npm/v/vue-svg-inline-loader.svg?style=flat)](https://www.npmjs.com/package/vue-svg-inline-loader)
@@ -12,6 +10,8 @@
 > Sprites works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach and only with HTML template format.
 
 > Loader has built-in [SVGO](https://github.com/svg/svgo) support for SVG optimization.
+
+> Based on my previous [img-svg-inline-loader](https://github.com/oliverfindl/img-svg-inline-loader).
 
 ---
 
@@ -34,6 +34,7 @@ In webpack config:
 {
 	test: /\.vue$/,
 	use: [
+		"vue-loader",
 		{
 			loader: "vue-svg-inline-loader",
 			options: { /* ... */ }
@@ -125,7 +126,7 @@ In XHTML mode attribute minimization is forbidden. Empty attributes are filled w
 * **svgo:**  
 [SVGO](https://github.com/svg/svgo) configuration object. Documentation can be found [here](https://github.com/svg/svgo).
 
-Notes: User-defined options are not deep-merged with default options.
+Notice: User-defined options are not deep-merged with default options.
 
 ---
 
