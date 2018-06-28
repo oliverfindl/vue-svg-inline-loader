@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.0.4 (2018-06-16)
+ * vue-svg-inline-loader v1.0.5 (2018-06-28)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -174,7 +174,7 @@ module.exports = function(content) {
 			symbols = Array.from(new Set(symbols));
 
 			/* add symbols wrapper */
-			symbols.unshift("<div style=\"display: none;\"><svg><symbols>");
+			symbols.unshift("<div style=\"display: none; !important\"><svg><symbols>");
 			symbols.push("</symbols></svg></div>");
 
 			/* return replaced content with symbols injected */
