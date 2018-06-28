@@ -64,7 +64,7 @@ Or if you want to use inline sprites:
 Which replaces into inline SVG using inline sprites:
 ```xml
 <!-- will get injected right after root opening tag in Vue component -->
-<div style="display: none;">
+<div style="display: none; !important">
 	<svg>
 		<symbols>
 			<symbol id="svg-sprite-example">
@@ -80,6 +80,10 @@ Which replaces into inline SVG using inline sprites:
 	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-sprite-example"></use>
 </svg>
 ```
+
+### Notice
+
+Loader won't parse any images with [Vue](https://github.com/vuejs/vue) [bindings](https://vuejs.org/v2/guide/class-and-style.html) used as `src` attribute [[more info](https://github.com/oliverfindl/vue-svg-inline-loader/issues/2)].
 
 ## Configuration
 
@@ -126,7 +130,9 @@ In XHTML mode attribute minimization is forbidden. Empty attributes are filled w
 * **svgo:**  
 [SVGO](https://github.com/svg/svgo) configuration object. Documentation can be found [here](https://github.com/svg/svgo).
 
-Notice: User-defined options are not deep-merged with default options.
+### Notice
+
+User-defined options are not deep-merged with default options.
 
 ---
 
