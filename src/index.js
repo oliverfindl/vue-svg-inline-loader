@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.0.5 (2018-06-28)
+ * vue-svg-inline-loader v1.0.6 (2018-07-11)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -48,8 +48,8 @@ const DEFAULT_OPTIONS_SCHEMA = Object.freeze({
 /* define all regular expression patterns */
 // const PATTERN_INLINE_KEYWORD; // will be defined dynamically based on keyword from options
 // const PATTERN_SPRITE_KEYWORD; // will be defined dynamically based on keyword from options
-const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s/i;
-const PATTERN_TEMPLATE_ROOT_OPEN_TAG = /(<template>\s*<[\s\S]+?>)([\s\S]*<\/template>)/i;
+const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
+const PATTERN_TEMPLATE_ROOT_OPEN_TAG = /(<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*<[\s\S]+?>)([\s\S]*<\/template>)/i;
 const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[\?#][^"']*)?["'][^>]*\/?>/gi;
 const PATTERN_SVG_CONTENT = /(<svg[^>]*>)([\s\S]*)(<\/svg>)/i;
 const PATTERN_SVG_OPEN_TAG = /^<svg/i;
