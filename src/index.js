@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.0.6 (2018-07-11)
+ * vue-svg-inline-loader v1.0.7 (2018-07-19)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -55,6 +55,7 @@ const PATTERN_SVG_CONTENT = /(<svg[^>]*>)([\s\S]*)(<\/svg>)/i;
 const PATTERN_SVG_OPEN_TAG = /^<svg/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
 const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
+const PATTERN_WHITESPACES = /\s+/g;
 const PATTERN_TAG = /^<|>$/;
 
 /* export loader */
@@ -77,11 +78,11 @@ module.exports = function(content) {
 	/* validate keywords and define regular expression patterns */
 	[options.inlineKeyword, options.spriteKeyword].forEach(keyword => {
 		if(!PATTERN_ATTRIBUTE_NAME.test(keyword)) {
-			throw new Error("Keyword " + keyword + " is not valid.");
+			throw new Error(`Keyword ${keyword} is not valid.`);
 		}
 	});
-	const PATTERN_INLINE_KEYWORD = new RegExp("\\s+(?:data-)?" + options.inlineKeyword + "\\s+", "i");
-	const PATTERN_SPRITE_KEYWORD = new RegExp("\\s+(?:data-)?" + options.spriteKeyword + "\\s+", "i");
+	const PATTERN_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.inlineKeyword}\\s+`, "i");
+	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.spriteKeyword}\\s+`, "i");
 
 	/* initialize svgo */
 	const svgo = new SVGO(options.svgo);
@@ -107,28 +108,28 @@ module.exports = function(content) {
 		try {
 			file.content = fs.readFileSync(file.path, { encoding: "utf-8" });
 		} catch(error) {
-			throw new Error("File " + file.path + " does not exist.");
+			throw new Error(`File ${file.path} does not exist.`);
 		}
 
 		/* process file content with svgo */
 		try {
 			file.content = (await svgo.optimize(file.content, { path: file.path })).data || file.content;
 		} catch(error) {
-			throw new Error("SVGO for " + file.path + " failed.");
+			throw new Error(`SVGO for ${file.path} failed.`);
 		}
 
 		/* check if svg content is not empty */
 		if(!PATTERN_SVG_CONTENT.test(file.content)) {
-			throw new Error("File " + file.path + " is empty.");
+			throw new Error(`File ${file.path} is empty.`);
 		}
 
 		/* check for keyword in strict mode and handle svg as sprite */
 		if(options._sprites && (!options.spriteStrict || PATTERN_SPRITE_KEYWORD.test(image))) {
 			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, svgOpenTag, symbol, svgCloseTag) => {
 				let id = [options.spriteKeyword, path.basename(file.path, ".svg")].join("-");
-				symbols.push("<symbol id=\"" + id + "\">" + symbol + "</symbol>");
+				symbols.push(`<symbol id="${id}">${symbol}</symbol>`);
 
-				return svgOpenTag + "<use xlink:href=\"#" + id + "\"></use>" + svgCloseTag;
+			return `${svgOpenTag}<use xlink:href="#${id}"></use>${svgCloseTag}`;
 			});
 		}
 
@@ -149,13 +150,13 @@ module.exports = function(content) {
 
 		/* add role and focusable to attributes if not present */
 		let keys = attributes.map(attribute => attribute.key.toLowerCase());
-		if(keys.indexOf("role") === -1) {
+		if(!keys.includes("role")) {
 			attributes.push({
 				key: "role",
 				value: "presentation"
 			});
 		}
-		if(keys.indexOf("focusable") === -1) {
+		if(!keys.includes("focusable")) {
 			attributes.push({
 				key: "focusable",
 				value: "false"
@@ -163,7 +164,7 @@ module.exports = function(content) {
 		}
 
 		/* add / remove attributes to file content and return it */
-		return file.content.replace(PATTERN_SVG_OPEN_TAG, "$& " + attributes.map(attribute => options.removeAttributes.indexOf(attribute.key.toLowerCase()) > -1 ? "" : (attribute.key + "=\"" + attribute.value + "\"")).join(" "));
+		return file.content.replace(PATTERN_SVG_OPEN_TAG, "$& " + attributes.map(attribute => options.removeAttributes.includes(attribute.key.toLowerCase()) ? "" : `${attribute.key}="${attribute.value}"`).join(" ").replace(PATTERN_WHITESPACES, " "));
 
 	}).then(content => {
 
@@ -174,11 +175,11 @@ module.exports = function(content) {
 			symbols = Array.from(new Set(symbols));
 
 			/* add symbols wrapper */
-			symbols.unshift("<div style=\"display: none; !important\"><svg><symbols>");
+			symbols.unshift("<div style=\"display: none !important;\"><svg><symbols>");
 			symbols.push("</symbols></svg></div>");
 
 			/* return replaced content with symbols injected */
-			return callback(null, content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, "$1" + symbols.join("") + "$2"));
+			return callback(null, content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1${symbols.join("")}$2`));
 
 		}
 

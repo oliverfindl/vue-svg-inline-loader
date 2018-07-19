@@ -64,7 +64,7 @@ Or if you want to use inline sprites:
 Which replaces into inline SVG using inline sprites:
 ```xml
 <!-- will get injected right after root opening tag in Vue component -->
-<div style="display: none; !important">
+<div style="display: none !important;">
 	<svg>
 		<symbols>
 			<symbol id="svg-sprite-example">
