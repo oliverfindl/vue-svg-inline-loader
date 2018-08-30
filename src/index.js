@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.0.7 (2018-07-19)
+ * vue-svg-inline-loader v1.0.8 (2018-08-30)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -14,24 +14,44 @@ const validateOptions = require("schema-utils");
 const SVGO = require("svgo");
 
 /* define default options object */
-const DEFAULT_OPTIONS = Object.freeze({
-	inlineKeyword: "svg-inline",
-	inlineStrict: true,
-	spriteKeyword: "svg-sprite",
-	spriteStrict: true,
+const DEFAULT_OPTIONS = freeze({
+	inline: {
+		keyword: "svg-inline",
+		strict: true
+	},
+	sprite: {
+		keyword: "svg-sprite",
+		strict: true
+	},
 	removeAttributes: ["alt", "src"],
 	xhtml: false,
-	svgo: { plugins: [ { cleanupattributes: true } ] }
+	svgo: { plugins: [ { cleanupAttrs: true } ] }
 });
 
 /* define validation schema object for options */
-const DEFAULT_OPTIONS_SCHEMA = Object.freeze({
+const DEFAULT_OPTIONS_SCHEMA = freeze({
 	type: "object",
 	properties: {
-		inlineKeyword: { type: "string" },
-		inlineStrict: { type: "boolean" },
-		spriteKeyword: { type: "string" },
-		spriteStrict: { type: "boolean" },
+//		inlineKeyword: { type: "string" }, // deprecated
+//		inlineStrict: { type: "boolean" }, // deprecated
+//		spriteKeyword: { type: "string" }, // deprecated
+//		spriteStrict: { type: "boolean" }, // deprecated
+		inline: {
+			type: "object",
+			properties: {
+				keyword: { type: "string" },
+				strict: { type:"boolean" }
+			},
+			additionalProperties: false
+		},
+		sprite: {
+			type: "object",
+			properties: {
+				keyword: { type: "string" },
+				strict: { type:"boolean" }
+			},
+			additionalProperties: false
+		},
 		removeAttributes: { type: "array" },
 		xhtml: { type: "boolean" },	
 		svgo: {
@@ -57,6 +77,7 @@ const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g
 const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
 const PATTERN_WHITESPACES = /\s+/g;
 const PATTERN_TAG = /^<|>$/;
+const PATTERN_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
 
 /* export loader */
 module.exports = function(content) {
@@ -67,8 +88,22 @@ module.exports = function(content) {
 	/* save callback reference */
 	const callback = this.async();
 
+	/* parse deprecated options */
+	let loaderOptions = loaderUtils.getOptions(this) || {};
+	Object.keys(loaderOptions).forEach(key => {
+		if(PATTERN_DEPRECATED_OPTION.test(key)) {
+			let value = loaderOptions[key];
+			let matches = key.toLowerCase().match(PATTERN_DEPRECATED_OPTION);
+			matches.shift();
+			let [ match1, match2 ] = matches;
+			loaderOptions[match1] = loaderOptions[match1] || {};
+			loaderOptions[match1][match2] = value;
+			delete loaderOptions[key];
+		}
+	});
+
 	/* parse and validate options */
-	let options = Object.assign({}, DEFAULT_OPTIONS, loaderUtils.getOptions(this) || {});
+	let options = Object.assign({}, DEFAULT_OPTIONS, loaderOptions);
 	options.removeAttributes = options.removeAttributes.map(attribute => attribute.toLowerCase());
 	validateOptions(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
 
@@ -76,13 +111,13 @@ module.exports = function(content) {
 	options._sprites = path.extname(this.resourcePath).toLowerCase() === ".vue" && PATTERN_VUE_SFC_HTML.test(content);
 
 	/* validate keywords and define regular expression patterns */
-	[options.inlineKeyword, options.spriteKeyword].forEach(keyword => {
+	[options.inline.keyword, options.sprite.keyword].forEach(keyword => {
 		if(!PATTERN_ATTRIBUTE_NAME.test(keyword)) {
 			throw new Error(`Keyword ${keyword} is not valid.`);
 		}
 	});
-	const PATTERN_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.inlineKeyword}\\s+`, "i");
-	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.spriteKeyword}\\s+`, "i");
+	const PATTERN_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.inline.keyword}\\s+`, "i");
+	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.sprite.keyword}\\s+`, "i");
 
 	/* initialize svgo */
 	const svgo = new SVGO(options.svgo);
@@ -94,7 +129,7 @@ module.exports = function(content) {
 	replace(content, PATTERN_IMAGE_SRC_SVG, async (image, source) => {
 
 		/* check for keyword in strict mode */
-		if(options.inlineStrict && !PATTERN_INLINE_KEYWORD.test(image)) {
+		if(options.inline.strict && !PATTERN_INLINE_KEYWORD.test(image)) {
 			return image;
 		}
 
@@ -124,9 +159,9 @@ module.exports = function(content) {
 		}
 
 		/* check for keyword in strict mode and handle svg as sprite */
-		if(options._sprites && (!options.spriteStrict || PATTERN_SPRITE_KEYWORD.test(image))) {
+		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
 			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, svgOpenTag, symbol, svgCloseTag) => {
-				let id = [options.spriteKeyword, path.basename(file.path, ".svg")].join("-");
+				let id = [options.sprite.keyword, path.basename(file.path, ".svg")].join("-");
 				symbols.push(`<symbol id="${id}">${symbol}</symbol>`);
 
 			return `${svgOpenTag}<use xlink:href="#${id}"></use>${svgCloseTag}`;
@@ -209,4 +244,20 @@ async function replace(string, regex, callback) {
 
 	/* replace all data */
 	return data.length ? string.replace(regex, () => data.shift()) : string;
+}
+
+/* object deep freeze function */
+function freeze(object) {
+
+	/* retrieve the property names defined on object */
+	let propNames = Object.getOwnPropertyNames(object);
+
+	/* freeze properties before freezing self */
+	for(let name of propNames) {
+		let value = object[name];
+		object[name] = value && typeof value === "object" ? freeze(value) : value;
+	}
+
+	/* return frozen object */
+	return Object.freeze(object);
 }

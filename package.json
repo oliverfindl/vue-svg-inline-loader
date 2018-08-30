@@ -1,6 +1,6 @@
 {
 	"name": "vue-svg-inline-loader",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"description": "Webpack loader used for inline replacement of SVG images with actual content of SVG files in Vue projects.",
 	"main": "src/index.js",
 	"files": [
@@ -28,7 +28,7 @@
 	"homepage": "https://github.com/oliverfindl/vue-svg-inline-loader#readme",
 	"dependencies": {
 		"loader-utils": "^1.1.0",
-		"schema-utils": "^0.4.5",
+		"schema-utils": "^1.0.0",
 		"svgo": "^1.0.5"
 	}
 }

@@ -90,10 +90,14 @@ Loader won't parse any images with [Vue](https://github.com/vuejs/vue) [bindings
 Default options:
 ```javascript
 {
-	inlineKeyword: "svg-inline",
-	inlineStrict: true,
-	spriteKeyword: "svg-sprite",
-	spriteStrict: true,
+	inline: {
+		keyword: "svg-inline",
+		strict: true
+	},
+	sprite: {
+		keyword: "svg-sprite",
+		strict: true
+	},
 	removeAttributes: ["alt", "src"],
 	xhtml: false,
 	svgo: {
@@ -107,18 +111,18 @@ Default options:
 }
 ```
 Explanation:
-* **inlineKeyword:**  
+* **inline.keyword:**  
 Defines keyword, which marks images you want to replace with inline SVG. Keyword has to be wrapped with whitespace characters (e.g. space). 
 In case of some conflicts, you can also use data version of your keyword (e.g. `data-keyword`).
 
-* **inlineStrict:**  
+* **inline.strict:**  
 In strict mode loader replaces only images with defined keyword. If strict mode is disabled, loader replaces all images.
 
-* **spriteKeyword:**  
+* **sprite.keyword:**  
 Defines keyword, which marks images you want to replace with inline SVG using inline sprites. Keyword has to be wrapped with whitespace characters (e.g. space). 
 In case of some conflicts, you can also use data version of your keyword (e.g. `data-keyword`).
 
-* **spriteStrict:**  
+* **sprite.strict:**  
 In strict mode loader replaces only images with defined keyword. If strict mode is disabled, loader replaces all images.
 
 * **removeAttributes:**  
