@@ -7,11 +7,10 @@
 
 [Webpack](https://github.com/webpack/webpack) loader used for inline replacement of SVG images with actual content of SVG files in [Vue](https://github.com/vuejs/vue) projects.
 
-> Sprites works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach and only with HTML template format.
+> Sprites works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach and only with HTML template format.  
+Can be also used on non-[Vue](https://github.com/vuejs/vue) projects, but sprites are not supported.
 
 > Loader has built-in [SVGO](https://github.com/svg/svgo) support for SVG optimization.
-
-> Based on my previous [img-svg-inline-loader](https://github.com/oliverfindl/img-svg-inline-loader).
 
 ---
 
@@ -99,6 +98,7 @@ Default options:
 		strict: true
 	},
 	removeAttributes: ["alt", "src"],
+	md5: false,
 	xhtml: false,
 	svgo: {
 		plugins: [
@@ -127,6 +127,9 @@ In strict mode loader replaces only images with defined keyword. If strict mode 
 
 * **removeAttributes:**  
 Array of attributes which will be removed from image tag and won't be transferred to inline SVG replacement.
+
+* **md5:**  
+Use md5-encoded file path as ID for SVG instead of file name. If project containts multiple SVG files with same file name but different file path, both used in same component, this is must.
 
 * **xhtml:**  
 In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g. `disabled="disabled"`).

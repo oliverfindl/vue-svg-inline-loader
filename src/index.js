@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.0.8 (2018-08-30)
+ * vue-svg-inline-loader v1.1.0 (2018-09-17)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -9,6 +9,7 @@
 /* require all dependencies */
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const loaderUtils = require("loader-utils");
 const validateOptions = require("schema-utils");
 const SVGO = require("svgo");
@@ -24,6 +25,7 @@ const DEFAULT_OPTIONS = freeze({
 		strict: true
 	},
 	removeAttributes: ["alt", "src"],
+	md5: false,
 	xhtml: false,
 	svgo: { plugins: [ { cleanupAttrs: true } ] }
 });
@@ -53,6 +55,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 			additionalProperties: false
 		},
 		removeAttributes: { type: "array" },
+		md5: { type: "boolean" },
 		xhtml: { type: "boolean" },	
 		svgo: {
 			type: "object",
@@ -161,10 +164,10 @@ module.exports = function(content) {
 		/* check for keyword in strict mode and handle svg as sprite */
 		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
 			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, svgOpenTag, symbol, svgCloseTag) => {
-				let id = [options.sprite.keyword, path.basename(file.path, ".svg")].join("-");
+				let id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(file.path).digest("hex") : path.basename(file.path, ".svg")].join("-");
 				symbols.push(`<symbol id="${id}">${symbol}</symbol>`);
 
-			return `${svgOpenTag}<use xlink:href="#${id}"></use>${svgCloseTag}`;
+				return `${svgOpenTag}<use xlink:href="#${id}"></use>${svgCloseTag}`;
 			});
 		}
 
