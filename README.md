@@ -129,7 +129,7 @@ In strict mode loader replaces only images with defined keyword. If strict mode 
 Array of attributes which will be removed from image tag and won't be transferred to inline SVG replacement.
 
 * **md5:**  
-Use md5-encoded file path as ID for SVG instead of file name. If project contains multiple SVG files with same file name but different file path, both used in same component, this is must.
+Use md5-encoded file path as ID for SVG sprites instead of plain file name. If project contains multiple SVG files with same file name but different file path, both used in same component, this is a must.
 
 * **xhtml:**  
 In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g. `disabled="disabled"`).
