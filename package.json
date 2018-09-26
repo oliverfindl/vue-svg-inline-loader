@@ -1,11 +1,16 @@
 {
 	"name": "vue-svg-inline-loader",
-	"version": "1.1.2",
+	"version": "1.1.3",
 	"description": "Webpack loader used for inline replacement of SVG images with actual content of SVG files in Vue projects.",
-	"main": "src/index.js",
+	"main": "dist/index.min.js",
 	"files": [
+		"dist/*.js",
 		"src/*.js"
 	],
+	"scripts": {
+		"build": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=env,minify,stage-2",
+		"watch": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=env,minify,stage-2 --watch"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/oliverfindl/vue-svg-inline-loader.git"
@@ -29,6 +34,13 @@
 	"dependencies": {
 		"loader-utils": "^1.1.0",
 		"schema-utils": "^1.0.0",
-		"svgo": "^1.0.5"
+		"svgo": "^1.1.1"
+	},
+	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-plugin-transform-runtime": "^6.23.0",
+		"babel-preset-env": "^1.7.0",
+		"babel-preset-minify": "^0.5.0",
+		"babel-preset-stage-2": "^6.24.1"
 	}
 }
