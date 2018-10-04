@@ -137,9 +137,13 @@ module.exports = function(content) {
 		}
 
 		/* make a file object of svg */
-		let file = {
-			path: loaderUtils.urlToRequest(path.join(this.context, source), "/")
-		};
+		let fullPath = await new Promise((resolve, reject) => {
+			this.resolve(this.context, source, function(err, resolvedPath) {
+				if (err) reject(err);
+				else resolve(resolvedPath);
+			});
+		});
+		let file = { path: fullPath };
 		this.addDependency(path.normalize(file.path));
 
 		/* load file content into file object */
