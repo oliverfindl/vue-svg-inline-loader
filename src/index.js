@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.1.3 (2018-09-26)
+ * vue-svg-inline-loader v1.1.4 (2018-10-04)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
@@ -136,14 +136,16 @@ module.exports = function(content) {
 			return image;
 		}
 
-		/* make a file object of svg */
-		let fullPath = await new Promise((resolve, reject) => {
-			this.resolve(this.context, source, function(err, resolvedPath) {
-				if (err) reject(err);
+		/* resolve path of svg file */
+		let filePath = await new Promise((resolve, reject) => {
+			this.resolve(this.context, source, (error, resolvedPath) => {
+				if(error) reject(error);
 				else resolve(resolvedPath);
 			});
 		});
-		let file = { path: fullPath };
+
+		/* create a file object of svg */
+		let file = { path: filePath };
 		this.addDependency(path.normalize(file.path));
 
 		/* load file content into file object */
