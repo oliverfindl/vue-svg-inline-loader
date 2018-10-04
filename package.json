@@ -8,8 +8,8 @@
 		"src/*.js"
 	],
 	"scripts": {
-		"build": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=env,minify,stage-2",
-		"watch": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=env,minify,stage-2 --watch"
+		"build": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=minify,stage-2,env",
+		"watch": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=minify,stage-2,env --watch"
 	},
 	"repository": {
 		"type": "git",
