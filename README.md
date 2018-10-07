@@ -14,6 +14,23 @@ Can be also used on non-[Vue](https://github.com/vuejs/vue) projects, but sprite
 
 ---
 
+## Notable changes:
+* v1.2.0
+	* Upgraded [Babel](https://github.com/babel/babel) to version 7
+	* Refactored code to ES6 syntax
+	* Added new option: [dataAttributes](#configuration)
+	* [Options](#configuration) are now deep-merged
+* v1.1.3
+	* Added transpiled version of loader
+* v1.1.0
+	* Added new option: [md5](#configuration)
+* v1.0.8
+	* [Options](#configuration) structure changed, deprecated options still get parsed to new ones
+* v1.0.0
+	* Initial release
+
+---
+
 ## Install
 
 Via [npm](https://npmjs.com/) [[package](https://www.npmjs.com/package/vue-svg-inline-loader)]:
