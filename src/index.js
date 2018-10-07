@@ -24,6 +24,7 @@ const DEFAULT_OPTIONS = freeze({
 		keyword: "svg-sprite",
 		strict: true
 	},
+	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
 	md5: false,
 	xhtml: false,
@@ -54,6 +55,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 			},
 			additionalProperties: false
 		},
+		dataAttributes: { type: "array" },
 		removeAttributes: { type: "array" },
 		md5: { type: "boolean" },
 		xhtml: { type: "boolean" },	
@@ -106,6 +108,7 @@ module.exports = function(content) {
 
 	/* parse and validate options */
 	const options = Object.assign({}, DEFAULT_OPTIONS, loaderOptions);
+	options.dataAttributes = options.dataAttributes.map(attribute => attribute.toLowerCase());
 	options.removeAttributes = options.removeAttributes.map(attribute => attribute.toLowerCase());
 	validateOptions(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
 
@@ -199,8 +202,21 @@ module.exports = function(content) {
 			attributes.set("focusable", "false");
 		}
 
-		/* add / remove attributes into file content and return it */
-		return attributes.size ? file.content.replace(PATTERN_SVG_OPEN_TAG, "$& " + [...attributes.keys()].map(attribute => !options.removeAttributes.includes(attribute) ? `${attribute}="${attributes.get(attribute).toLowerCase()}"` : "").join(" ")) : file.content;
+		/* transform attributes to data-attributes */
+		for(const attribute of options.dataAttributes) {
+			if(attributes.has(attribute)) {
+				attributes.set(`data-${attribute}`, attributes.get(attribute));
+				attributes.delete(attribute);
+			}
+		}
+
+		/* remove unwanted attributes */
+		for(const attribute of options.removeAttributes) {
+			attributes.delete(attribute); // .has() is not neccessary
+		}
+
+		/* inject attributes to file content if available and return it */
+		return attributes.size ? file.content.replace(PATTERN_SVG_OPEN_TAG, "$& " + [...attributes.keys()].map(attribute => `${attribute}="${attributes.get(attribute)}"`).join(" ")) : file.content;
 
 	}).then(content => {
 

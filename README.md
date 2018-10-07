@@ -97,6 +97,7 @@ Default options:
 		keyword: "svg-sprite",
 		strict: true
 	},
+	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
 	md5: false,
 	xhtml: false,
@@ -125,8 +126,11 @@ In case of some conflicts, you can also use data version of your keyword (e.g. `
 * **sprite.strict:**  
 In strict mode loader replaces only images with defined keyword. If strict mode is disabled, loader replaces all images.
 
+* **dataAttributes:**  
+Array of attributes which will be renamed to data-attributes.
+
 * **removeAttributes:**  
-Array of attributes which will be removed from image tag and won't be transferred to inline SVG replacement.
+Array of attributes which will be removed.
 
 * **md5:**  
 Use md5-encoded file path as ID for SVG sprites instead of plain file name. If project contains multiple SVG files with same file name but different file path, both used in same component, this is a must.
