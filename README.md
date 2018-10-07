@@ -143,7 +143,7 @@ In XHTML mode attribute minimization is forbidden. Empty attributes are filled w
 
 ### Notice
 
-User-defined options are not deep-merged with default options.
+User-defined options are deep-merged with default options. Arrays are not concatenated.
 
 ---
 

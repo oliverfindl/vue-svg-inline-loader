@@ -100,15 +100,27 @@ module.exports = function(content) {
 			const value = loaderOptions[name];
 			const matches = name.toLowerCase().match(PATTERN_DEPRECATED_OPTION);
 			const [ match1, match2 ] = matches.slice(1);
-			loaderOptions[match1] = loaderOptions[match1] || {};
-			loaderOptions[match1][match2] = loaderOptions[match1][match2] || value;
+			merge(loaderOptions, {
+				arrayConcat: false,
+				arrayUnique: false,
+				overwrite: false,
+				skipUndefined: true
+			}, {
+				[match1]: {
+					[match2]: value
+				}
+			});
 			delete loaderOptions[name];
 		}
 	};
 
 	/* parse and validate options */
-	const options = Object.assign({}, DEFAULT_OPTIONS, loaderOptions);
-	options.dataAttributes = options.dataAttributes.map(attribute => attribute.toLowerCase());
+	const options = merge({}, {
+		arrayConcat: false,
+		arrayUnique: false,
+		overwrite: true,
+		skipUndefined: true
+	}, DEFAULT_OPTIONS, loaderOptions);
 	options.removeAttributes = options.removeAttributes.map(attribute => attribute.toLowerCase());
 	validateOptions(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
 
@@ -262,4 +274,51 @@ function freeze(object) {
 
 	/* return frozen object */
 	return Object.freeze(object);
+}
+
+/*  object deep merge function */
+function merge(object, options, ...sources) {
+
+	/* iterate through all provided sources */
+	for(const source of sources) {
+
+		/* retrieve the property names defined on object */
+		const propNames = Object.getOwnPropertyNames(source);
+
+		/* recursively merge properties */
+		for(const name of propNames) {
+			const value = source[name];
+
+			/* skip undefined values */
+			if(options && options.skipUndefined && value === undefined) {
+				continue;
+			}
+
+			/* skip if both values equals */
+			if(value === object[name]) {
+				continue;
+			}
+
+			/* merge based on options */
+			if(value && typeof value === "object") {
+				if(options && options.arrayConcat && Array.isArray(object[name]) && Array.isArray(value)) {
+					object[name] = object[name].concat(value);
+					if(options && options.arrayUnique) {
+						object[name] = Array.from(new Set(object[name]));
+					}
+				} else if(Array.isArray(value)) {
+					object[name] = options && options.overwrite || object[name] === undefined ? value : object[name];
+				} else {
+					object[name] = merge(object[name] || {}, options, value);
+				}
+			} else {
+				object[name] = options && options.overwrite || object[name] === undefined ? value : object[name];
+			}
+
+		}
+
+	}
+
+	/* return merged object */
+	return object;
 }
