@@ -8,8 +8,8 @@
 		"src/*.js"
 	],
 	"scripts": {
-		"build": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=minify,stage-2,env",
-		"watch": "npx babel src/index.js --out-file dist/index.min.js --no-comments --plugins=transform-runtime --presets=minify,stage-2,env --watch"
+		"build": "npx babel src/index.js --out-file dist/index.min.js",
+		"watch": "npx babel src/index.js --out-file dist/index.min.js --watch"
 	},
 	"repository": {
 		"type": "git",
@@ -32,15 +32,16 @@
 	},
 	"homepage": "https://github.com/oliverfindl/vue-svg-inline-loader#readme",
 	"dependencies": {
+		"@babel/polyfill": "^7.0.0",
+		"@babel/runtime": "^7.1.2",
 		"loader-utils": "^1.1.0",
 		"schema-utils": "^1.0.0",
 		"svgo": "^1.1.1"
 	},
 	"devDependencies": {
-		"babel-cli": "^6.26.0",
-		"babel-plugin-transform-runtime": "^6.23.0",
-		"babel-preset-env": "^1.7.0",
-		"babel-preset-minify": "^0.5.0",
-		"babel-preset-stage-2": "^6.24.1"
+		"@babel/cli": "^7.1.2",
+		"@babel/core": "^7.1.2",
+		"@babel/plugin-transform-runtime": "^7.1.0",
+		"@babel/preset-env": "^7.1.0"
 	}
 }

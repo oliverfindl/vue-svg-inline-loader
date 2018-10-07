@@ -78,7 +78,6 @@ const PATTERN_SVG_CONTENT = /(<svg[^>]*>)([\s\S]*)(<\/svg>)/i;
 const PATTERN_SVG_OPEN_TAG = /^<svg/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
 const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
-const PATTERN_WHITESPACES = /\s+/g;
 const PATTERN_TAG = /^<|>$/;
 const PATTERN_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
 
@@ -92,21 +91,21 @@ module.exports = function(content) {
 	const callback = this.async();
 
 	/* parse deprecated options */
-	let loaderOptions = loaderUtils.getOptions(this) || {};
-	Object.keys(loaderOptions).forEach(key => {
-		if(PATTERN_DEPRECATED_OPTION.test(key)) {
-			let value = loaderOptions[key];
-			let matches = key.toLowerCase().match(PATTERN_DEPRECATED_OPTION);
-			matches.shift();
-			let [ match1, match2 ] = matches;
+	const loaderOptions = loaderUtils.getOptions(this) || {};
+	const loaderOptionsPropNames = Object.getOwnPropertyNames(loaderOptions);
+	for(const name of loaderOptionsPropNames) {
+		if(PATTERN_DEPRECATED_OPTION.test(name)) {
+			const value = loaderOptions[name];
+			const matches = name.toLowerCase().match(PATTERN_DEPRECATED_OPTION);
+			const [ match1, match2 ] = matches.slice(1);
 			loaderOptions[match1] = loaderOptions[match1] || {};
-			loaderOptions[match1][match2] = value;
-			delete loaderOptions[key];
+			loaderOptions[match1][match2] = loaderOptions[match1][match2] || value;
+			delete loaderOptions[name];
 		}
-	});
+	};
 
 	/* parse and validate options */
-	let options = Object.assign({}, DEFAULT_OPTIONS, loaderOptions);
+	const options = Object.assign({}, DEFAULT_OPTIONS, loaderOptions);
 	options.removeAttributes = options.removeAttributes.map(attribute => attribute.toLowerCase());
 	validateOptions(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
 
@@ -114,19 +113,19 @@ module.exports = function(content) {
 	options._sprites = path.extname(this.resourcePath).toLowerCase() === ".vue" && PATTERN_VUE_SFC_HTML.test(content);
 
 	/* validate keywords and define regular expression patterns */
-	[options.inline.keyword, options.sprite.keyword].forEach(keyword => {
+	for(const keyword of [options.inline.keyword, options.sprite.keyword]) {
 		if(!PATTERN_ATTRIBUTE_NAME.test(keyword)) {
 			throw new Error(`Keyword ${keyword} is not valid.`);
 		}
-	});
+	}
 	const PATTERN_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.inline.keyword}\\s+`, "i");
 	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.sprite.keyword}\\s+`, "i");
 
 	/* initialize svgo */
 	const svgo = new SVGO(options.svgo);
 
-	/* create empty symbols array */
-	let symbols = [];
+	/* create empty symbols set */
+	const symbols = new Set();
 
 	/* async replace */
 	replace(content, PATTERN_IMAGE_SRC_SVG, async (image, source) => {
@@ -137,7 +136,7 @@ module.exports = function(content) {
 		}
 
 		/* resolve path of svg file */
-		let filePath = await new Promise((resolve, reject) => {
+		const filePath = await new Promise((resolve, reject) => {
 			this.resolve(this.context, source, (error, resolvedPath) => {
 				if(error) reject(error);
 				else resolve(resolvedPath);
@@ -145,7 +144,7 @@ module.exports = function(content) {
 		});
 
 		/* create a file object of svg */
-		let file = { path: filePath };
+		const file = { path: filePath };
 		this.addDependency(path.normalize(file.path));
 
 		/* load file content into file object */
@@ -170,65 +169,43 @@ module.exports = function(content) {
 		/* check for keyword in strict mode and handle svg as sprite */
 		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
 			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, svgOpenTag, symbol, svgCloseTag) => {
-				let id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(file.path).digest("hex") : path.basename(file.path, ".svg")].join("-");
-				symbols.push(`<symbol id="${id}">${symbol}</symbol>`);
+				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(file.path).digest("hex") : path.basename(file.path, ".svg")].join("-");
+				symbols.add(`<symbol id="${id}">${symbol}</symbol>`); // .has() is not neccessary
 
 				return `${svgOpenTag}<use xlink:href="#${id}"></use>${svgCloseTag}`;
 			});
 		}
 
+		/* create empty attributes map */
+		const attributes = new Map();
+
 		/* parse attributes */
-		let attribute, attributes = [];
+		let attribute;
 		while(attribute = PATTERN_ATTRIBUTES.exec(image)) {
 			if(attribute.index === PATTERN_ATTRIBUTES.lastIndex) {
 				PATTERN_ATTRIBUTES.lastIndex++;
 			}
 			if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
-				attributes.push({
-					key: attribute[1],
-					value: attribute[2] ? attribute[2] : (options.xhtml ? attribute[1] : "")
-				});
+				attributes.set(attribute[1].toLowerCase(), (attribute[2] ? attribute[2] : (options.xhtml ? attribute[1] : "").toLowerCase()));
 			}
 		}
 		PATTERN_ATTRIBUTES.lastIndex = 0;
 
 		/* add role and focusable to attributes if not present */
-		let keys = attributes.map(attribute => attribute.key.toLowerCase());
-		if(!keys.includes("role")) {
-			attributes.push({
-				key: "role",
-				value: "presentation"
-			});
+		if(!attributes.has("role")) {
+			attributes.set("role", "presentation");
 		}
-		if(!keys.includes("focusable")) {
-			attributes.push({
-				key: "focusable",
-				value: "false"
-			});
+		if(!attributes.has("focusable")) {
+			attributes.set("focusable", "false");
 		}
 
-		/* add / remove attributes to file content and return it */
-		return file.content.replace(PATTERN_SVG_OPEN_TAG, "$& " + attributes.map(attribute => options.removeAttributes.includes(attribute.key.toLowerCase()) ? "" : `${attribute.key}="${attribute.value}"`).join(" ").replace(PATTERN_WHITESPACES, " "));
+		/* add / remove attributes into file content and return it */
+		return attributes.size ? file.content.replace(PATTERN_SVG_OPEN_TAG, "$& " + [...attributes.keys()].map(attribute => !options.removeAttributes.includes(attribute) ? `${attribute}="${attributes.get(attribute).toLowerCase()}"` : "").join(" ")) : file.content;
 
 	}).then(content => {
 
-		/* inject symbols into document */
-		if(options._sprites && symbols.length) {
-
-			/* remove duplicate symbols */
-			symbols = Array.from(new Set(symbols));
-
-			/* add symbols wrapper */
-			symbols.unshift("<div style=\"display: none !important;\"><svg><symbols>");
-			symbols.push("</symbols></svg></div>");
-
-			/* return replaced content with symbols injected */
-			return callback(null, content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1${symbols.join("")}$2`));
-
-		}
-
-		/* return replaced content */
-		return callback(null, content);
+		/* inject symbols into file content if available and return it */
+		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1<div style=\"display: none !important;\"><svg><symbols>${[...symbols].join("")}</symbols></svg></div>$2`) : content);
 	
 	}).catch(error => {
 
@@ -244,12 +221,12 @@ async function replace(string, regex, callback) {
 	regex.lastIndex = 0;
 
 	/* get all data */
-	let data, promises = [];
+	const promises = [];
 	string.replace(regex, (match, ...args) => {
-		let promise = callback(match, ...args);
+		const promise = callback(match, ...args);
 		promises.push(promise);
 	});
-	data = await Promise.all(promises);
+	const data = await Promise.all(promises);
 
 	/* replace all data */
 	return data.length ? string.replace(regex, () => data.shift()) : string;
@@ -259,11 +236,11 @@ async function replace(string, regex, callback) {
 function freeze(object) {
 
 	/* retrieve the property names defined on object */
-	let propNames = Object.getOwnPropertyNames(object);
+	const propNames = Object.getOwnPropertyNames(object);
 
-	/* freeze properties before freezing self */
-	for(let name of propNames) {
-		let value = object[name];
+	/* recursively freeze properties before freezing self */
+	for(const name of propNames) {
+		const value = object[name];
 		object[name] = value && typeof value === "object" ? freeze(value) : value;
 	}
 
