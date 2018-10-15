@@ -9,7 +9,7 @@
 /* require all dependencies */
 const path = require("path");
 const crypto = require("crypto");
-const loaderUtils = require("loader-utils");
+const { getOptions } = require("loader-utils");
 const validateOptions = require("schema-utils");
 const SVGO = require("svgo");
 
@@ -92,7 +92,7 @@ module.exports = function(content) {
 	const callback = this.async();
 
 	/* parse deprecated options */
-	const loaderOptions = loaderUtils.getOptions(this) || {};
+	const loaderOptions = getOptions(this) || {};
 	const loaderOptionsPropNames = Object.getOwnPropertyNames(loaderOptions);
 	for(const name of loaderOptionsPropNames) {
 		if(PATTERN_DEPRECATED_OPTION.test(name)) {
@@ -152,8 +152,11 @@ module.exports = function(content) {
 		/* resolve path of svg file */
 		const filePath = await new Promise((resolve, reject) => {
 			this.resolve(this.context, source, (error, resolvedPath) => {
-				if(error) reject(error);
-				else resolve(resolvedPath);
+				if(error) {
+					reject(error);
+				}
+
+				resolve(resolvedPath);
 			});
 		});
 
@@ -195,6 +198,7 @@ module.exports = function(content) {
 
 		/* parse attributes */
 		let attribute;
+		PATTERN_ATTRIBUTES.lastIndex = 0;
 		while(attribute = PATTERN_ATTRIBUTES.exec(image)) {
 			if(attribute.index === PATTERN_ATTRIBUTES.lastIndex) {
 				PATTERN_ATTRIBUTES.lastIndex++;
@@ -203,7 +207,6 @@ module.exports = function(content) {
 				attributes.set(attribute[1].toLowerCase(), (attribute[2] ? attribute[2] : (options.xhtml ? attribute[1] : "").toLowerCase()));
 			}
 		}
-		PATTERN_ATTRIBUTES.lastIndex = 0;
 
 		/* add role and focusable to attributes if not present */
 		if(!attributes.has("role")) {
