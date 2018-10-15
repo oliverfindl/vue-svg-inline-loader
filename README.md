@@ -14,7 +14,7 @@ Can be also used on non-[Vue](https://github.com/vuejs/vue) projects, but sprite
 
 ---
 
-## Notable changes:
+## Notable changes
 * v1.2.0
 	* Upgraded [Babel](https://github.com/babel/babel) to version 7
 	* Refactored code to ES6 syntax
