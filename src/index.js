@@ -7,7 +7,6 @@
 "use strict";
 
 /* require all dependencies */
-const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const loaderUtils = require("loader-utils");
@@ -164,7 +163,7 @@ module.exports = function(content) {
 
 		/* load file content into file object */
 		try {
-			file.content = fs.readFileSync(file.path, { encoding: "utf-8" });
+			file.content = this.fs.readFileSync(file.path, { encoding: "utf-8" });
 		} catch(error) {
 			throw new Error(`File ${file.path} does not exist.`);
 		}
