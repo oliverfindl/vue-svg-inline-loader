@@ -7,12 +7,12 @@
 "use strict";
 
 /* require all dependencies */
+const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const { getOptions } = require("loader-utils");
 const validateOptions = require("schema-utils");
 const SVGO = require("svgo");
-const fs = require("fs");
 
 /* define default options object */
 const DEFAULT_OPTIONS = freeze({
@@ -112,7 +112,7 @@ module.exports = function(content) {
 			});
 			delete loaderOptions[name];
 		}
-	};
+	}
 
 	/* parse and validate options */
 	const options = merge({}, {
