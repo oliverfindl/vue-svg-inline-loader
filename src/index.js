@@ -12,6 +12,7 @@ const crypto = require("crypto");
 const { getOptions } = require("loader-utils");
 const validateOptions = require("schema-utils");
 const SVGO = require("svgo");
+const fs = require("fs");
 
 /* define default options object */
 const DEFAULT_OPTIONS = freeze({
@@ -166,7 +167,7 @@ module.exports = function(content) {
 
 		/* load file content into file object */
 		try {
-			file.content = this.fs.readFileSync(file.path, { encoding: "utf-8" });
+			file.content = fs.readFileSync(file.path, { encoding: "utf-8" });
 		} catch(error) {
 			throw new Error(`File ${file.path} does not exist.`);
 		}
