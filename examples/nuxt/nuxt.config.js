@@ -1,4 +1,4 @@
-const { resolve } = require("path")
+const { join } = require('path')
 const pkg = require('./package')
 
 module.exports = {
@@ -67,7 +67,7 @@ module.exports = {
         },
         {
 //        loader: 'vue-svg-inline-loader', // in your project
-          loader: resolve(__dirname, '../../index.js'),
+          loader: join(__dirname, '../../index.js'),
           options: { /* ... */ }
         }
       ];

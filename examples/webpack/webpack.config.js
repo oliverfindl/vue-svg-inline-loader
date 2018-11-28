@@ -25,7 +25,7 @@ module.exports = {
           },
           {
 //           loader: 'vue-svg-inline-loader', // in your project
-             loader: path.resolve(__dirname, '../../index.js'),
+             loader: path.join(__dirname, '../../index.js'),
              options: { /* ... */ }
           }
         ] 

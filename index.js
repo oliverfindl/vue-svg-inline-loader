@@ -1,5 +1,5 @@
 "use strict";
 
-const { resolve } = require("path");
+const { join } = require("path");
 
-module.exports = require(resolve(__dirname + "/src/index.js"));
+module.exports = require(join(__dirname, "./src/index.js"));
