@@ -7,14 +7,16 @@
 
 [Webpack](https://github.com/webpack/webpack) loader used for inline replacement of SVG images with actual content of SVG files in [Vue](https://github.com/vuejs/vue) projects.
 
-> Sprites works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach and only with HTML template format.  
-Can be also used on non-[Vue](https://github.com/vuejs/vue) projects, but sprites are not supported.
+> Sprite option works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach and only with HTML template format.
 
 > Loader has built-in [SVGO](https://github.com/svg/svgo) support for SVG optimization.
 
 ---
 
 ## Notable changes
+* v1.2.3
+	* Changed default value of [md5](#configuration) option to `true`
+	* Added examples for [webpack](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/webpack), [vue-cli](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/vue-cli) and [nuxt](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/nuxt) based projects
 * v1.2.0
 	* Upgraded [Babel](https://github.com/babel/babel) to version 7
 	* Refactored code to ES6 syntax
@@ -27,7 +29,7 @@ Can be also used on non-[Vue](https://github.com/vuejs/vue) projects, but sprite
 * v1.0.8
 	* [Options](#configuration) structure changed, deprecated options still get parsed to new ones
 * v1.0.0
-	* Initial release
+	* Initial release based on my [img-svg-inline-loader](https://github.com/oliverfindl/img-svg-inline-loader) project
 
 ---
 
@@ -45,39 +47,83 @@ $ yarn add vue-svg-inline-loader --dev
 
 ## Usage
 
-In webpack config:
+With [webpack](https://webpack.js.org/) - [webpack.config.js](https://webpack.js.org/concepts/loaders/#configuration):
 ```javascript
-{
-	test: /\.vue$/,
-	use: [
-		"vue-loader",
-		{
-			loader: "vue-svg-inline-loader",
-			options: { /* ... */ }
-		},
-		// ...
-	]
-}
+module.exports = {
+	module: {
+		rules: [
+			{
+				test: /\.vue$/,
+				use: [
+					{
+						loader: "vue-loader",
+						options: { /* ... */ }
+					},
+					{
+						loader: "vue-svg-inline-loader",
+						options: { /* ... */ }
+					}
+				]
+			}
+		]
+	}
+};
 ```
 
-Inline replacement:
+With [vue-cli](https://cli.vuejs.org/) - [vue.config.js](https://cli.vuejs.org/guide/webpack.html#chaining-advanced):
+```javascript
+module.exports = {
+	chainWebpack: config => {
+		config.module
+			.rule("vue")
+			.use("vue-svg-inline-loader")
+				.loader("vue-svg-inline-loader")
+				.options({ /* ... */ });
+	}
+};
+```
+
+With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack#how-to-extend-webpack-config-):
+```javascript
+module.exports = {
+	build: {
+		extend(config, { isDev, isClient }) {
+			const vueRule = config.module.rules.find(rule => rule.test.test(".vue"));
+			vueRule.use = [
+				{
+					loader: vueRule.loader,
+					options: vueRule.options
+				},
+				{
+					loader: "vue-svg-inline-loader",
+					options: { /* ... */ }
+				}
+			];
+			delete vueRule.loader;
+			delete vueRule.options;
+		}
+	}
+};
+```
+
+Basic inline SVG usage with `svg-inline` keyword directive:
 ```html
 <img svg-inline class="icon" src="./images/example.svg" alt="example" />
 ```
 
-Which replaces into inline SVG:
+Which replaces into:
 ```xml
 <svg svg-inline class="icon" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="...">
 	<path d="..."></path>
 </svg>
 ```
 
-Or if you want to use inline sprites:
+Basic inline SVG sprite usage with `svg-sprite` keyword directive:
 ```html
 <img svg-inline svg-sprite class="icon" src="./images/example.svg" alt="example" />
 ```
 
-Which replaces into inline SVG using inline sprites:
+Which replaces into:
 ```xml
 <!-- will get injected right after root opening tag in Vue component -->
 <div style="display: none !important;">
