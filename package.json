@@ -8,6 +8,9 @@
 		"dist/*.js",
 		"src/*.js"
 	],
+	"directories": {
+		"example": "examples"
+	},
 	"scripts": {
 		"build": "npx babel src/index.js --out-file dist/index.min.js",
 		"watch": "npx babel src/index.js --out-file dist/index.min.js --watch"
