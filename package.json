@@ -4,6 +4,7 @@
 	"description": "Webpack loader used for inline replacement of SVG images with actual content of SVG files in Vue projects.",
 	"main": "dist/index.min.js",
 	"files": [
+		"*.js",
 		"dist/*.js",
 		"src/*.js"
 	],
