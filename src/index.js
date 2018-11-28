@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS = freeze({
 	},
 	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
-	md5: false,
+	md5: true,
 	xhtml: false,
 	svgo: { plugins: [ { cleanupAttrs: true } ] }
 });
@@ -187,7 +187,8 @@ module.exports = function(content) {
 		/* check for keyword in strict mode and handle svg as sprite */
 		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
 			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, svgOpenTag, symbol, svgCloseTag) => {
-				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(path.join(...[this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")))).digest("hex") : path.basename(file.path, ".svg")].join("-");
+				const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
+				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
 				symbols.add(`<symbol id="${id}">${symbol}</symbol>`); // .has() is not neccessary
 
 				return `${svgOpenTag}<use xlink:href="#${id}"></use>${svgCloseTag}`;

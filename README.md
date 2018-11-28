@@ -83,7 +83,7 @@ Which replaces into inline SVG using inline sprites:
 <div style="display: none !important;">
 	<svg>
 		<symbols>
-			<symbol id="svg-sprite-example">
+			<symbol id="svg-sprite-md5hash">
 				<path d="..."></path>
 			</symbol>
 			<!-- ... -->
@@ -91,9 +91,8 @@ Which replaces into inline SVG using inline sprites:
 	</svg>
 </div>
 <!-- ... -->
-<!-- later in code -->
 <svg svg-inline svg-sprite class="icon" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="...">
-	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-sprite-example"></use>
+	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-sprite-md5hash"></use>
 </svg>
 ```
 
@@ -116,7 +115,7 @@ Default options:
 	},
 	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
-	md5: false,
+	md5: true,
 	xhtml: false,
 	svgo: {
 		plugins: [
@@ -150,7 +149,7 @@ Array of attributes which will be renamed to data-attributes.
 Array of attributes which will be removed.
 
 * **md5:**  
-Use md5-encoded file path as ID for SVG sprites instead of plain file name. If project contains multiple SVG files with same file name but different file path, both used in same component, this is a must.
+Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext. Set it to `false` only for development purposes.
 
 * **xhtml:**  
 In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g. `disabled="disabled"`).
