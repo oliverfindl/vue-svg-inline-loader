@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.2.3 (2018-11-28)
+ * vue-svg-inline-loader v1.2.4 (2018-11-28)
  * Copyright 2018 Oliver Findl
  * @license MIT
  */
