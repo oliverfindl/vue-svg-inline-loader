@@ -60,11 +60,15 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 		md5: { type: "boolean" },
 		xhtml: { type: "boolean" },	
 		svgo: {
-			type: "object",
-			properties: {
-				plugins: { type: "array" }
-			},
-			additionalProperties: false
+			oneOf: [{
+				type: "object",
+				properties: {
+					plugins: { type: "array" }
+				},
+				additionalProperties: false
+			}, {
+				enum: [null, false]
+			}]
 		}
 	},
 	additionalProperties: false
@@ -137,7 +141,7 @@ module.exports = function(content) {
 	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.sprite.keyword}\\s+`, "i");
 
 	/* initialize svgo */
-	const svgo = new SVGO(options.svgo);
+	const svgo = options.svgo && new SVGO(options.svgo);
 
 	/* create empty symbols set */
 	const symbols = new Set();
@@ -174,7 +178,7 @@ module.exports = function(content) {
 
 		/* process file content with svgo */
 		try {
-			file.content = (await svgo.optimize(file.content, { path: file.path })).data || file.content;
+			file.content = svgo && (await svgo.optimize(file.content, { path: file.path })).data || file.content;
 		} catch(error) {
 			throw new Error(`SVGO for ${file.path} failed.`);
 		}
