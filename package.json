@@ -37,15 +37,15 @@
 	"homepage": "https://github.com/oliverfindl/vue-svg-inline-loader#readme",
 	"dependencies": {
 		"@babel/polyfill": "^7.0.0",
-		"@babel/runtime": "^7.1.5",
+		"@babel/runtime": "^7.2.0",
 		"loader-utils": "^1.1.0",
 		"schema-utils": "^1.0.0",
 		"svgo": "^1.1.1"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.1.5",
-		"@babel/core": "^7.1.6",
-		"@babel/plugin-transform-runtime": "^7.1.0",
-		"@babel/preset-env": "^7.1.6"
+		"@babel/cli": "^7.2.0",
+		"@babel/core": "^7.2.0",
+		"@babel/plugin-transform-runtime": "^7.2.0",
+		"@babel/preset-env": "^7.2.0"
 	}
 }
