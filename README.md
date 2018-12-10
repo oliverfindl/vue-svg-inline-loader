@@ -9,11 +9,13 @@
 
 > Sprite option works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach and only with HTML template format.
 
-> Loader has built-in [SVGO](https://github.com/svg/svgo) support for SVG optimization.
+> Loader has built-in [SVGO][SVGO] support for SVG optimization.
 
 ---
 
 ## Notable changes
+* v1.2.5
+	* Modified [svgo](#configuration) option to accept `null` or `false` value for disabling SVG optimization
 * v1.2.3
 	* Changed default value of [md5](#configuration) option to `true`
 	* Added examples for [webpack](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/webpack), [vue-cli](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/vue-cli) and [nuxt](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/nuxt) based projects
@@ -201,7 +203,7 @@ Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext.
 In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g. `disabled="disabled"`).
 
 * **svgo:**  
-[SVGO](https://github.com/svg/svgo) configuration object. Documentation can be found [here](https://github.com/svg/svgo).
+[SVGO][SVGO] configuration object. Documentation can be found [here][SVGO]. Set to `null` or `false` to disable SVG optimization.
 
 ### Notice
 
@@ -212,3 +214,5 @@ User-defined options are deep-merged with default options. Arrays are not concat
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
+
+[SVGO]: https://github.com/svg/svgo
