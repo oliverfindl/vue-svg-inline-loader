@@ -20,9 +20,11 @@
 		"url": "git+https://github.com/oliverfindl/vue-svg-inline-loader.git"
 	},
 	"keywords": [
+		"vue",
+		"vue-cli",
+		"nuxt",
 		"webpack",
 		"loader",
-		"vue",
 		"svg",
 		"inline",
 		"sprites",
