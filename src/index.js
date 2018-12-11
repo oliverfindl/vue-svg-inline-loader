@@ -130,8 +130,11 @@ module.exports = function(content) {
 	options.removeAttributes = options.removeAttributes.map(attribute => attribute.toLowerCase());
 	validateOptions(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
 
+	/* check if SVGO can be used */
+	options._svgo = !!options.svgo;
+
 	/* check if sprites can be used */
-	options._sprites = path.extname(this.resourcePath).toLowerCase() === ".vue" && PATTERN_VUE_SFC_HTML.test(content);
+	options._sprites = !!(path.extname(this.resourcePath).toLowerCase() === ".vue" && PATTERN_VUE_SFC_HTML.test(content));
 
 	/* validate keywords and define regular expression patterns */
 	for(const keyword of [options.inline.keyword, options.sprite.keyword]) {
@@ -143,7 +146,7 @@ module.exports = function(content) {
 	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.sprite.keyword}\\s+`, "i");
 
 	/* initialize svgo */
-	const svgo = options.svgo && new SVGO(options.svgo === true ? DEFAULT_OPTIONS.svgo : options.svgo);
+	const svgo = options._svgo && new SVGO(options.svgo === true ? DEFAULT_OPTIONS.svgo : options.svgo);
 
 	/* create empty symbols set */
 	const symbols = new Set();
@@ -178,16 +181,16 @@ module.exports = function(content) {
 			throw new Error(`File ${file.path} does not exist.`);
 		}
 
-		/* process file content with svgo */
-		try {
-			file.content = svgo && (await svgo.optimize(file.content, { path: file.path })).data || file.content;
-		} catch(error) {
-			throw new Error(`SVGO for ${file.path} failed.`);
-		}
-
 		/* check if svg content is not empty */
 		if(!PATTERN_SVG_CONTENT.test(file.content)) {
 			throw new Error(`File ${file.path} is empty.`);
+		}
+
+		/* process file content with svgo */
+		try {
+			file.content = options._svgo && (await svgo.optimize(file.content, { path: file.path })).data || file.content;
+		} catch(error) {
+			throw new Error(`SVGO for ${file.path} failed.`);
 		}
 
 		/* check for keyword in strict mode and handle svg as sprite */
