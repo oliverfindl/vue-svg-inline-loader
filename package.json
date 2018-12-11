@@ -25,6 +25,7 @@
 		"nuxt",
 		"webpack",
 		"loader",
+		"svgo",
 		"svg",
 		"inline",
 		"sprites",
