@@ -28,7 +28,7 @@ const DEFAULT_OPTIONS = freeze({
 	removeAttributes: ["alt", "src"],
 	md5: true,
 	xhtml: false,
-	svgo: { plugins: [ { cleanupAttrs: true } ] }
+	svgo: { plugins: [ { removeViewBox: false } ] }
 });
 
 /* define validation schema object for options */
