@@ -14,6 +14,9 @@
 ---
 
 ## Notable changes
+* v1.2.6
+	* Modified default value of [svgo](#configuration) option to preserve viewBox attribute
+	* Modified [svgo](#configuration) option to accept `true` value as alias for default [configuration]((#configuration))
 * v1.2.5
 	* Modified [svgo](#configuration) option to accept `null` or `false` value for disabling SVG optimization
 * v1.2.3
@@ -165,14 +168,16 @@ Default options:
 	removeAttributes: ["alt", "src"],
 	md5: true,
 	xhtml: false,
+	svgo: true
+/* value true for svgo option is alias for:
 	svgo: {
 		plugins: [
 			{
-				cleanupAttrs: true
-			},
-			// ...
+				removeViewBox: false
+			}
 		]
 	}
+*/
 }
 ```
 Explanation:
@@ -203,7 +208,7 @@ Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext.
 In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g. `disabled="disabled"`).
 
 * **svgo:**  
-[SVGO][SVGO] configuration object. Documentation can be found [here][SVGO]. Set to `null` or `false` to disable SVG optimization.
+Pass [SVGO][SVGO] configuration object (documentation can be found [here][SVGO]) or `true` for default configuration. Pass `null` or `false` to disable SVG optimization.
 
 ### Notice
 
