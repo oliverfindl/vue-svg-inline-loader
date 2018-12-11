@@ -67,7 +67,9 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 				},
 				additionalProperties: false
 			}, {
-				enum: [null, false]
+				type: "boolean"
+			}, {
+				enum: [null]
 			}]
 		}
 	},
@@ -141,7 +143,7 @@ module.exports = function(content) {
 	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.sprite.keyword}\\s+`, "i");
 
 	/* initialize svgo */
-	const svgo = options.svgo && new SVGO(options.svgo);
+	const svgo = options.svgo && new SVGO(options.svgo === true ? DEFAULT_OPTIONS.svgo : options.svgo);
 
 	/* create empty symbols set */
 	const symbols = new Set();
