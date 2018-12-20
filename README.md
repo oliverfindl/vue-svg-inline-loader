@@ -7,9 +7,11 @@
 
 [Webpack](https://github.com/webpack/webpack) loader used for inline replacement of SVG images with actual content of SVG files in [Vue](https://github.com/vuejs/vue) projects.
 
-> Sprite option works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach and only with HTML template format.
+> Loader parses only HTML template format.
 
 > Loader has built-in [SVGO][SVGO] support for SVG optimization.
+
+> Sprite option works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach.
 
 ---
 
