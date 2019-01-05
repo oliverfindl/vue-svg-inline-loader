@@ -1,5 +1,5 @@
 {
-  "name": "nuxt",
+  "name": "nuxt-example",
   "version": "1.0.0",
   "description": "My divine Nuxt.js project",
   "author": "",
@@ -17,10 +17,10 @@
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0",
-    "babel-eslint": "^8.2.1",
-    "eslint": "^5.0.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.12.0",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-vue": "^4.0.0"
+    "eslint-plugin-vue": "^5.1.0",
+    "nodemon": "^1.18.9"
   }
 }
