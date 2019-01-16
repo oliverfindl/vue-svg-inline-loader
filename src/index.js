@@ -215,8 +215,9 @@ module.exports = function(content) {
 				PATTERN_ATTRIBUTES.lastIndex++;
 			}
 			if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
-				const value = attribute[3] || attribute[2];
-				attributes.set(attribute[1].toLowerCase(), (value ? value : (options.xhtml ? attribute[1] : "").toLowerCase()));
+				const name = attribute[1];
+				const value = attribute[2] || attribute[3];
+				attributes.set(name.toLowerCase(), (value ? value : (options.xhtml ? name : "").toLowerCase()));
 			}
 		}
 
