@@ -105,15 +105,14 @@ module.exports = function(content) {
 		if(PATTERN_DEPRECATED_OPTION.test(name)) {
 			const value = loaderOptions[name];
 			const matches = name.toLowerCase().match(PATTERN_DEPRECATED_OPTION);
-			const [ match1, match2 ] = matches.slice(1);
 			merge(loaderOptions, {
 				arrayConcat: false,
 				arrayUnique: false,
 				overwrite: false,
 				skipUndefined: true
 			}, {
-				[match1]: {
-					[match2]: value
+				[matches[1]]: {
+					[matches[2]]: value
 				}
 			});
 			delete loaderOptions[name];
@@ -221,10 +220,12 @@ module.exports = function(content) {
 			}
 		}
 
-		/* add role and focusable to attributes if not present */
+		/* add role attribute if not present */
 		if(!attributes.has("role")) {
 			attributes.set("role", "presentation");
 		}
+
+		/* add focusable attribute if not present */
 		if(!attributes.has("focusable")) {
 			attributes.set("focusable", "false");
 		}
