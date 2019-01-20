@@ -35,10 +35,10 @@ const DEFAULT_OPTIONS = freeze({
 const DEFAULT_OPTIONS_SCHEMA = freeze({
 	type: "object",
 	properties: {
-//		inlineKeyword: { type: "string" }, // deprecated
-//		inlineStrict: { type: "boolean" }, // deprecated
-//		spriteKeyword: { type: "string" }, // deprecated
-//		spriteStrict: { type: "boolean" }, // deprecated
+		// inlineKeyword: { type: "string" }, // deprecated
+		// inlineStrict: { type: "boolean" }, // deprecated
+		// spriteKeyword: { type: "string" }, // deprecated
+		// spriteStrict: { type: "boolean" }, // deprecated
 		inline: {
 			type: "object",
 			properties: {
@@ -81,7 +81,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 // const PATTERN_SPRITE_KEYWORD; // will be defined dynamically based on keyword from options
 const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
 const PATTERN_TEMPLATE_ROOT_OPEN_TAG = /(<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*<[\s\S]+?>)([\s\S]*<\/template>)/i;
-const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[\?#][^"']*)?["'][^>]*\/?>/gi;
+const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>/gi;
 const PATTERN_SVG_CONTENT = /(<svg[^>]*>)([\s\S]*)(<\/svg>)/i;
 const PATTERN_SVG_OPEN_TAG = /^<svg/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
@@ -210,7 +210,7 @@ module.exports = function(content) {
 		/* parse attributes */
 		let attribute;
 		PATTERN_ATTRIBUTES.lastIndex = 0;
-		while(attribute = PATTERN_ATTRIBUTES.exec(image)) {
+		while(attribute = PATTERN_ATTRIBUTES.exec(image)) { // eslint-disable-line no-cond-assign
 			if(attribute.index === PATTERN_ATTRIBUTES.lastIndex) {
 				PATTERN_ATTRIBUTES.lastIndex++;
 			}
@@ -248,7 +248,7 @@ module.exports = function(content) {
 	}).then(content => {
 
 		/* inject symbols into file content if available and return it */
-		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1<div style=\"display: none !important;\"><svg><symbols>${[...symbols].join("")}</symbols></svg></div>$2`) : content);
+		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1<div style="display: none !important;"><svg><symbols>${[...symbols].join("")}</symbols></svg></div>$2`) : content);
 	
 	}).catch(error => {
 
