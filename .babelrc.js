@@ -1,5 +1,7 @@
-{
-	"plugins": [
+"use strict";
+
+module.exports = {
+    "plugins": [
 		"@babel/plugin-transform-runtime"
 	],
 	"presets": [
@@ -15,4 +17,4 @@
 	],
 	"minified": true,
 	"comments": false
-}
+};
