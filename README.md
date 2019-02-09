@@ -16,6 +16,8 @@
 ---
 
 ## Notable changes
+* v1.2.11
+	 * Fixed a bug where original svg attributes were used by referencing svg rather than symbol itself. This may introduce breaking changes for developers who rely on this bugged behavior.
 * v1.2.6
 	* Modified default value of [svgo](#configuration) option to preserve viewBox attribute
 	* Modified [svgo](#configuration) option to accept `true` value as alias for default [configuration]((#configuration))
@@ -89,6 +91,7 @@ module.exports = {
 	}
 };
 ```
+It can also be used for [Gridsome](https://gridsome.org/) - [gridsome.config.js](https://gridsome.org/docs/config#chainwebpack).
 
 With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack#how-to-extend-webpack-config-):
 ```javascript
