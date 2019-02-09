@@ -82,7 +82,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
 const PATTERN_TEMPLATE_ROOT_OPEN_TAG = /(<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*<[\s\S]+?>)([\s\S]*<\/template>)/i;
 const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>/gi;
-const PATTERN_SVG_CONTENT = /(<svg[^>]*>)([\s\S]*)(<\/svg>)/i;
+const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
 const PATTERN_SVG_OPEN_TAG = /^<svg/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
 const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
@@ -194,12 +194,12 @@ module.exports = function(content) {
 
 		/* check for keyword in strict mode and handle svg as sprite */
 		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
-			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, svgOpenTag, symbol, svgCloseTag) => {
+			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
 				const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
 				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
-				symbols.add(`<symbol id="${id}">${symbol}</symbol>`); // .has() is not neccessary
+				symbols.add(`<symbol id="${id}"${attributes}>${symbol}</symbol>`); // .has() is not neccessary
 
-				return `${svgOpenTag}<use xlink:href="#${id}"></use>${svgCloseTag}`;
+				return `<svg><use xlink:href="#${id}"></use></svg>`;
 			});
 		}
 
