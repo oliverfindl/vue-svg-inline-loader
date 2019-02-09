@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img svg-inline svg-sprite src="./assets/logo.svg" class="vue-logo">
+    <img svg-inline svg-sprite src="./assets/logo.svg" class="vue-logo" />
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
