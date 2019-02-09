@@ -126,7 +126,14 @@ module.exports = function(content) {
 		overwrite: true,
 		skipUndefined: true
 	}, DEFAULT_OPTIONS, loaderOptions);
-	options.removeAttributes = options.removeAttributes.map(attribute => attribute.toLowerCase());
+	["dataAttributes", "removeAttributes"].forEach(option => {
+		options[option] = options[option].map(attribute => attribute.toLowerCase());
+		options[option].forEach(attribute => {
+			[":", "@"].forEach(shorthand => {
+				options[option].push(shorthand + attribute);
+			});
+		});
+	});
 	validateOptions(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
 
 	/* check if SVGO can be used */
@@ -199,7 +206,7 @@ module.exports = function(content) {
 				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
 				symbols.add(`<symbol id="${id}"${attributes}>${symbol}</symbol>`); // .has() is not neccessary
 
-				return `<svg><use xlink:href="#${id}"></use></svg>`;
+				return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><use xlink:href="#${id}" href="#${id}"></use></svg>`;
 			});
 		}
 
@@ -220,14 +227,14 @@ module.exports = function(content) {
 			}
 		}
 
-		/* add role attribute if not present */
-		if(!attributes.has("role")) {
-			attributes.set("role", "presentation");
-		}
-
 		/* add focusable attribute if not present */
 		if(!attributes.has("focusable")) {
 			attributes.set("focusable", "false");
+		}
+
+		/* add role attribute if not present */
+		if(!attributes.has("role")) {
+			attributes.set("role", "presentation");
 		}
 
 		/* transform attributes to data-attributes */
@@ -249,7 +256,7 @@ module.exports = function(content) {
 	}).then(content => {
 
 		/* inject symbols into file content if available and return it */
-		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1<div style="display: none !important;"><svg><symbols>${[...symbols].join("")}</symbols></svg></div>$2`) : content);
+		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">${[...symbols].join("")}</svg>$2`) : content);
 	
 	}).catch(error => {
 

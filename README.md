@@ -120,7 +120,7 @@ Basic inline SVG usage with `svg-inline` keyword directive:
 
 Which replaces into:
 ```xml
-<svg svg-inline class="icon" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="...">
+<svg svg-inline class="icon" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" viewBox="...">
 	<path d="..."></path>
 </svg>
 ```
@@ -133,19 +133,15 @@ Basic inline SVG sprite usage with `svg-sprite` keyword directive:
 Which replaces into:
 ```xml
 <!-- will get injected right after root opening tag in Vue component -->
-<div style="display: none !important;">
-	<svg>
-		<symbols>
-			<symbol id="svg-sprite-md5hash">
-				<path d="..."></path>
-			</symbol>
-			<!-- ... -->
-		</symbols>
-	</svg>
-</div>
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">
+	<symbol id="svg-sprite-md5hash" viewBox="...">
+		<path d="..."></path>
+	</symbol>
+	<!-- ... -->
+</svg>
 <!-- ... -->
-<svg svg-inline svg-sprite class="icon" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="...">
-	<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#svg-sprite-md5hash"></use>
+<svg svg-inline svg-sprite class="icon" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<use xlink:href="#svg-sprite-md5hash" href="#svg-sprite-md5hash"></use>
 </svg>
 ```
 
