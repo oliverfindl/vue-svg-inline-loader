@@ -80,7 +80,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 // const PATTERN_INLINE_KEYWORD; // will be defined dynamically based on keyword from options
 // const PATTERN_SPRITE_KEYWORD; // will be defined dynamically based on keyword from options
 const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
-const PATTERN_TEMPLATE_ROOT_OPEN_TAG = /(<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*<[\s\S]+?>)([\s\S]*<\/template>)/i;
+const PATTERN_BEFORE_ROOT_CLOSE_TAG = /(<template[^>]*>[\s\S]+)(\s*<\/[^>]+>[\s\S]*<\/template>)/i;
 const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>/gi;
 const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
 const PATTERN_SVG_OPEN_TAG = /^<svg/i;
@@ -256,7 +256,7 @@ module.exports = function(content) {
 	}).then(content => {
 
 		/* inject symbols into file content if available and return it */
-		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_TEMPLATE_ROOT_OPEN_TAG, `$1<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">${[...symbols].join("")}</svg>$2`) : content);
+		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_BEFORE_ROOT_CLOSE_TAG, `$1<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">${[...symbols].join("")}</svg>$2`) : content);
 	
 	}).catch(error => {
 
