@@ -75,15 +75,15 @@ if (process.env.NODE_ENV === 'production') {
       'process.env': {
         NODE_ENV: '"production"'
       }
-	}),
-	/* Error: webpack.optimize.UglifyJsPlugin has been removed, please use config.optimization.minimize instead.
+    }),
+    /* Error: webpack.optimize.UglifyJsPlugin has been removed, please use config.optimization.minimize instead.
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
         warnings: false
       }
-	}),
-	*/
+    }),
+    */
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
