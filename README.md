@@ -11,7 +11,7 @@
 
 > Loader has built-in [SVGO][SVGO] support for SVG optimization.
 
-> Sprite option works only with [Vue](https://github.com/vuejs/vue) [Single File Component](https://vuejs.org/guide/single-file-components.html) approach.
+> Sprite option works only with [Vue Single File Component](https://vuejs.org/guide/single-file-components.html) approach.
 
 ---
 
