@@ -16,6 +16,8 @@
 ---
 
 ## Notable changes
+* v 1.2.14
+	* Added example for [gridsome](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/gridsome) based projects
 * v1.2.11
 	 * Fixed a bug where original svg attributes were used by referencing svg rather than symbol itself. This may introduce breaking changes for developers who rely on this bugged behavior.
 * v1.2.6
@@ -150,7 +152,7 @@ Which replaces into:
 
 ### Notice
 
-Loader won't parse any images with [Vue](https://github.com/vuejs/vue) [bindings](https://vuejs.org/v2/guide/class-and-style.html) used as `src` attribute [[more info](https://github.com/oliverfindl/vue-svg-inline-loader/issues/2)].
+Loader won't parse any images with [Vue bindings](https://vuejs.org/v2/guide/class-and-style.html) used as `src` attribute [[more info](https://github.com/oliverfindl/vue-svg-inline-loader/issues/2)].
 
 ## Configuration
 
