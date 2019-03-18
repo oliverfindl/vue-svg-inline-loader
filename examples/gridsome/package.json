@@ -8,8 +8,5 @@
   },
   "dependencies": {
     "gridsome": "^0.5.0"
-  },
-  "devDependencies": {
-    "vue-svg-inline-loader": "^1.2.13"
   }
 }
