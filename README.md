@@ -56,7 +56,9 @@ Via [yarn](https://yarnpkg.com/en/) [[package](https://yarnpkg.com/en/package/vu
 $ yarn add vue-svg-inline-loader --dev
 ```
 
-## Usage
+## Configuration
+
+### Webpack
 
 With [webpack](https://webpack.js.org/) - [webpack.config.js](https://webpack.js.org/concepts/loaders/#configuration):
 ```javascript
@@ -81,6 +83,8 @@ module.exports = {
 };
 ```
 
+### Vue-CLI
+
 With [vue-cli](https://cli.vuejs.org/) - [vue.config.js](https://cli.vuejs.org/guide/webpack.html#chaining-advanced):
 ```javascript
 module.exports = {
@@ -94,6 +98,8 @@ module.exports = {
 };
 ```
 It can also be used for [Gridsome](https://gridsome.org/) - [gridsome.config.js](https://gridsome.org/docs/config#chainwebpack).
+
+### Nuxt
 
 With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack#how-to-extend-webpack-config-):
 ```javascript
@@ -117,6 +123,26 @@ module.exports = {
 	}
 };
 ```
+
+### Quasar Framework
+
+With [Quasar](https://v1.quasar-framework.org) - [quasar.conf.js](https://v1.quasar-framework.org/quasar-cli/cli-documentation/handling-webpack#Usage-with-quasar.conf.js):
+
+```javascript
+extendWebpack (cfg) {
+  cfg.module.rules.push({
+    test: /\.vue$/,
+    use: [
+      {
+        loader: 'vue-svg-inline-loader',
+        options: {svgo: false}
+      }
+    ]
+  })
+}
+```
+
+## Usage
 
 Basic inline SVG usage with `svg-inline` keyword directive:
 ```html
