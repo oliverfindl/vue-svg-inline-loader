@@ -12,7 +12,7 @@
 		"example": "examples"
 	},
 	"scripts": {
-		"build": "npm run lint && npx rimraf dist/* && npx babel src/index.js --out-file dist/index.min.js",
+		"build": "npm run lint && npx rimraf dist/* && npx babel src/index.js | terser --output dist/index.min.js --",
 		"watch": "npx babel src/index.js --out-file dist/index.min.js --watch",
 		"lint": "npx eslint src/index.js",
 		"lint:fix": "npx eslint --fix src/index.js"
@@ -41,18 +41,19 @@
 	},
 	"homepage": "https://github.com/oliverfindl/vue-svg-inline-loader#readme",
 	"dependencies": {
-		"@babel/polyfill": "^7.2.5",
-		"@babel/runtime": "^7.3.4",
+		"@babel/runtime": "^7.4.5",
 		"loader-utils": "^1.2.3",
 		"schema-utils": "^1.0.0",
 		"svgo": "^1.2.0"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.2.3",
-		"@babel/core": "^7.3.4",
-		"@babel/plugin-transform-runtime": "^7.3.4",
-		"@babel/preset-env": "^7.3.4",
+		"@babel/cli": "^7.4.4",
+		"@babel/core": "^7.4.5",
+		"@babel/plugin-transform-runtime": "^7.4.4",
+		"@babel/preset-env": "^7.4.5",
+		"core-js": "^3.1.4",
 		"eslint": "^5.15.3",
-		"rimraf": "^2.6.3"
+		"rimraf": "^2.6.3",
+		"terser": "^4.0.0"
 	}
 }

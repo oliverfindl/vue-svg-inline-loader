@@ -58,7 +58,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 		dataAttributes: { type: "array" },
 		removeAttributes: { type: "array" },
 		md5: { type: "boolean" },
-		xhtml: { type: "boolean" },	
+		xhtml: { type: "boolean" },
 		svgo: {
 			oneOf: [{
 				type: "object",
@@ -257,7 +257,7 @@ module.exports = function(content) {
 
 		/* inject symbols into file content if available and return it */
 		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_BEFORE_ROOT_CLOSE_TAG, `$1<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">${[...symbols].join("")}</svg>$2`) : content);
-	
+
 	}).catch(error => {
 
 		/* return error */

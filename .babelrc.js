@@ -1,20 +1,25 @@
 "use strict";
 
 module.exports = {
-    "plugins": [
-		"@babel/plugin-transform-runtime"
+  "plugins": [
+		[
+			"@babel/plugin-transform-runtime",
+		 	{
+				"regenerator": true
+			}
+		]
 	],
 	"presets": [
 		[
 			"@babel/preset-env",
 			{
-				"useBuiltIns": "usage"
+				"useBuiltIns": "entry",
+				"corejs": 3
 			}
 		]
 	],
 	"only": [
 		"src/*.js"
 	],
-	"minified": true,
 	"comments": false
 };
