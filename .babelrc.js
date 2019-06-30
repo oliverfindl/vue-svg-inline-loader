@@ -1,14 +1,15 @@
 "use strict";
 
 module.exports = {
-    "plugins": [
+	"plugins": [
 		"@babel/plugin-transform-runtime"
 	],
 	"presets": [
 		[
 			"@babel/preset-env",
 			{
-				"useBuiltIns": "usage"
+				"useBuiltIns": "usage",
+				"corejs": 2
 			}
 		]
 	],

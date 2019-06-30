@@ -58,7 +58,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 		dataAttributes: { type: "array" },
 		removeAttributes: { type: "array" },
 		md5: { type: "boolean" },
-		xhtml: { type: "boolean" },	
+		xhtml: { type: "boolean" },
 		svgo: {
 			oneOf: [{
 				type: "object",
@@ -194,14 +194,14 @@ module.exports = function(content) {
 
 		/* process file content with svgo */
 		try {
-			file.content = options._svgo && (await svgo.optimize(file.content, { path: file.path })).data || file.content;
+			file.content = options._svgo && (await svgo.optimize(file.content, { path: file.path })).data || file.content; // eslint-disable-line require-atomic-updates
 		} catch(error) {
 			throw new Error(`SVGO for ${file.path} failed.`);
 		}
 
 		/* check for keyword in strict mode and handle svg as sprite */
 		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
-			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
+			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars, require-atomic-updates
 				const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
 				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
 				symbols.add(`<symbol id="${id}"${attributes}>${symbol}</symbol>`); // .has() is not neccessary
@@ -257,7 +257,7 @@ module.exports = function(content) {
 
 		/* inject symbols into file content if available and return it */
 		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_BEFORE_ROOT_CLOSE_TAG, `$1<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">${[...symbols].join("")}</svg>$2`) : content);
-	
+
 	}).catch(error => {
 
 		/* return error */
