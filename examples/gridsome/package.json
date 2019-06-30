@@ -1,5 +1,5 @@
 {
-  "name": "gridsome",
+  "name": "gridsome-example",
   "private": true,
   "scripts": {
     "build": "gridsome build",
@@ -7,6 +7,6 @@
     "explore": "gridsome explore"
   },
   "dependencies": {
-    "gridsome": "^0.5.0"
+    "gridsome": "^0.6.5"
   }
 }

@@ -59,20 +59,12 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-      const vueRule = config.module.rules.find(rule => rule.test.test('.vue'));
-      vueRule.use = [
-        {
-          loader: vueRule.loader,
-          options: vueRule.options
-        },
-        {
-//        loader: 'vue-svg-inline-loader', // in your project
-          loader: join(__dirname, '../../index.js'),
-          options: { /* ... */ }
-        }
-      ];
-      delete vueRule.loader;
-      delete vueRule.options;
+      config.module.rules.push({
+        test: /\.vue$/,
+//      loader: "vue-svg-inline-loader", // in your project
+        loader: join(__dirname, '../../index.js'),
+        options: { /* ... */ }
+      })
     }
   }
 }
