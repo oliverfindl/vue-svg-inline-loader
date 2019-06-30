@@ -2,8 +2,10 @@
 
 ## [gridsome example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/gridsome)
 
-## [webpack example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/webpack)
+## [nuxt example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/nuxt)
+
+## [quasar example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/quasar)
 
 ## [vue-cli example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/vue-cli)
 
-## [nuxt example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/nuxt)
+## [webpack example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/webpack)
