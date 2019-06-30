@@ -16,6 +16,9 @@
 ---
 
 ## Notable changes
+
+* v 1.2.16
+	* Added example for [quasar](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/quasar) based projects 
 * v 1.2.14
 	* Added example for [gridsome](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/gridsome) based projects
 * v1.2.11
@@ -58,8 +61,10 @@ $ yarn add vue-svg-inline-loader --dev
 
 ## Usage
 
-With [webpack](https://webpack.js.org/) - [webpack.config.js](https://webpack.js.org/concepts/loaders/#configuration):
+With [webpack](https://webpack.js.org/) - [webpack.config.js](https://webpack.js.org/concepts/loaders/#configuration) (**recommended**):  
 ```javascript
+// webpack
+
 module.exports = {
 	module: {
 		rules: [
@@ -81,8 +86,12 @@ module.exports = {
 };
 ```
 
-With [vue-cli](https://cli.vuejs.org/) - [vue.config.js](https://cli.vuejs.org/guide/webpack.html#chaining-advanced):
+With [vue-cli](https://cli.vuejs.org/) - [vue.config.js](https://cli.vuejs.org/guide/webpack.html#chaining-advanced):  
+With [gridsome](https://gridsome.org/) - [gridsome.config.js](https://gridsome.org/docs/config#chainwebpack):  
+With [quasar](https://quasar.dev/) - [quasar.conf.js](https://quasar.dev/quasar-cli/cli-documentation/handling-webpack#Usage-with-quasar.conf.js):  
 ```javascript
+// vue-cli, gridsome, quasar
+
 module.exports = {
 	chainWebpack: config => {
 		config.module
@@ -93,26 +102,22 @@ module.exports = {
 	}
 };
 ```
-It can also be used for [Gridsome](https://gridsome.org/) - [gridsome.config.js](https://gridsome.org/docs/config#chainwebpack).
 
-With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack#how-to-extend-webpack-config-):
+With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack#how-to-extend-webpack-config-):  
+With [quasar](https://quasar.dev/) - [quasar.conf.js](https://quasar.dev/quasar-cli/cli-documentation/handling-webpack#Usage-with-quasar.conf.js):  
 ```javascript
+// nuxt, quasar
+
 module.exports = {
 	build: {
-		extend(config, { isDev, isClient }) {
-			const vueRule = config.module.rules.find(rule => rule.test.test(".vue"));
-			vueRule.use = [
-				{
-					loader: vueRule.loader,
-					options: vueRule.options
-				},
-				{
-					loader: "vue-svg-inline-loader",
-					options: { /* ... */ }
-				}
-			];
-			delete vueRule.loader;
-			delete vueRule.options;
+		// use extend() method for nuxt
+		// use extendWebpack() method for quasar
+		extendWebpack(config, { isServer, isClient }) {
+			config.module.rules.push({
+				test: /\.vue$/,
+				loader: "vue-svg-inline-loader",
+				options: { /* ... */ }
+			})
 		}
 	}
 };
