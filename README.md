@@ -123,6 +123,23 @@ module.exports = {
 };
 ```
 
+With [laravel-mix](https://laravel-mix.com/) - [webpack.mix.js](https://laravel-mix.com/docs/4.1/quick-webpack-configuration):
+```javascript
+// laravel-mix
+
+const mix = require("laravel-mix");
+
+mix.override(config => {
+	config.module.rules.push({
+		test: /\.vue$/,
+		use: [{
+			loader: "vue-svg-inline-loader",
+			options: { /* ... */ }
+		}]
+	})
+});
+```
+
 Basic inline SVG usage with `svg-inline` keyword directive:
 ```html
 <img svg-inline class="icon" src="./images/example.svg" alt="example" />
