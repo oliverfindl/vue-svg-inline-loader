@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "cross-env": "^5.2.0",
-    "nuxt": "^2.8.1"
+    "nuxt": "^2.9.2"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.2",
-    "eslint": "^5.16.0",
-    "eslint-loader": "^2.1.2",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.2.2",
+    "eslint-loader": "^3.0.0",
     "eslint-plugin-vue": "^5.2.3",
     "nodemon": "^1.19.1"
   }
