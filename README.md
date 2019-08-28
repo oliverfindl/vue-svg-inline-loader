@@ -17,6 +17,8 @@
 
 ## Notable changes
 
+* v1.2.17
+	* Add example usage configuration for laravel-mix based projects
 * v 1.2.16
 	* Added example for [quasar](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/quasar) based projects 
 * v 1.2.14
