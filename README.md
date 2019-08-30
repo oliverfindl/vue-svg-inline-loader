@@ -19,9 +19,9 @@
 
 * v1.2.17
 	* Add example usage configuration for laravel-mix based projects
-* v 1.2.16
+* v1.2.16
 	* Added example for [quasar](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/quasar) based projects 
-* v 1.2.14
+* v1.2.14
 	* Added example for [gridsome](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/gridsome) based projects
 * v1.2.11
 	 * Fixed a bug where original svg attributes were used by referencing svg rather than symbol itself. This may introduce breaking changes for developers who rely on this bugged behavior.
