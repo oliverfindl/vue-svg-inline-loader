@@ -30,6 +30,7 @@
 		"quasar",
 		"webpack",
 		"loader",
+		"webpack-loader",
 		"svgo",
 		"svg",
 		"inline",
