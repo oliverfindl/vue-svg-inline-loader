@@ -83,7 +83,8 @@ const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)
 const PATTERN_BEFORE_ROOT_CLOSE_TAG = /(<template[^>]*>[\s\S]+)(\s*<\/[^>]+>[\s\S]*<\/template>)/i;
 const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>/gi;
 const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
-const PATTERN_SVG_OPEN_TAG = /^<svg/i;
+const PATTERN_SVG_TAG = /^<svg[^>]*/i;
+const PATTERN_USE_TAG = /<use[^>]*/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
 const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
 const PATTERN_TAG = /^<|>$/;
@@ -199,8 +200,8 @@ module.exports = function(content) {
 			throw new Error(`SVGO for ${file.path} failed.`);
 		}
 
-		/* check for keyword in strict mode and handle svg as sprite */
-		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
+		/* check for keyword in strict mode, check and handle svg as sprite */
+		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image)) && !PATTERN_USE_TAG.test(file.content)) {
 			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars, require-atomic-updates
 				const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
 				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
@@ -251,7 +252,7 @@ module.exports = function(content) {
 		}
 
 		/* inject attributes to file content if available and return it */
-		return attributes.size ? file.content.replace(PATTERN_SVG_OPEN_TAG, "$& " + [...attributes.keys()].map(attribute => `${attribute}="${attributes.get(attribute)}"`).join(" ")) : file.content;
+		return attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => `${attribute}="${attributes.get(attribute)}"`).join(" ")) : file.content;
 
 	}).then(content => {
 
