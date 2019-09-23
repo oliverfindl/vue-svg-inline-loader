@@ -17,6 +17,8 @@
 
 ## Notable changes
 
+* v1.3.0
+	* Added new option: [addAttributes](#configuration)
 * v1.2.17
 	* Add example usage configuration for laravel-mix based projects
 * v1.2.16
@@ -193,6 +195,11 @@ Default options:
 	},
 	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
+	addAttributes: {
+		role: "presentation",
+		focusable: false,
+		tabindex: -1
+	},
 	md5: true,
 	xhtml: false,
 	svgo: true
@@ -227,6 +234,9 @@ Array of attributes which will be renamed to data-attributes.
 
 * **removeAttributes:**  
 Array of attributes which will be removed.
+
+* **addAttributes:**  
+Object of attributes which will be added.
 
 * **md5:**  
 Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext. Set it to `false` only for development purposes.

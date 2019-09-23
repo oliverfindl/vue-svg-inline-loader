@@ -26,6 +26,11 @@ const DEFAULT_OPTIONS = freeze({
 	},
 	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
+	addAttributes: {
+		role: "presentation",
+		focusable: false,
+		tabindex: -1
+	},
 	md5: true,
 	xhtml: false,
 	svgo: { plugins: [ { removeViewBox: false } ] }
@@ -57,6 +62,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 		},
 		dataAttributes: { type: "array" },
 		removeAttributes: { type: "array" },
+		addAttributes: { type: "object" },
 		md5: { type: "boolean" },
 		xhtml: { type: "boolean" },
 		svgo: {
@@ -228,16 +234,6 @@ module.exports = function(content) {
 			}
 		}
 
-		/* add focusable attribute if not present */
-		if(!attributes.has("focusable")) {
-			attributes.set("focusable", "false");
-		}
-
-		/* add role attribute if not present */
-		if(!attributes.has("role")) {
-			attributes.set("role", "presentation");
-		}
-
 		/* transform attributes to data-attributes */
 		for(const attribute of options.dataAttributes) {
 			if(attributes.has(attribute)) {
@@ -249,6 +245,13 @@ module.exports = function(content) {
 		/* remove unwanted attributes */
 		for(const attribute of options.removeAttributes) {
 			attributes.delete(attribute); // .has() is not neccessary
+		}
+
+		/* add attributes if not present */
+		for(const attribute in options.addAttributes) {
+			if(!attributes.has(attribute)) {
+				attributes.set(attribute, options.addAttributes[attribute].toString());
+			}
 		}
 
 		/* inject attributes to file content if available and return it */
