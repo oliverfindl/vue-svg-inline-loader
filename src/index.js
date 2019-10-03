@@ -93,6 +93,7 @@ const PATTERN_SVG_TAG = /^<svg[^>]*/i;
 const PATTERN_USE_TAG = /<use[^>]*/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
 const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
+const PATTERN_ATTRIBUTE_NAME_VUE = /^([:@]|v-bind:|v-on:).+$/i;
 const PATTERN_TAG = /^<|>$/;
 const PATTERN_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
 
@@ -228,9 +229,7 @@ module.exports = function(content) {
 				PATTERN_ATTRIBUTES.lastIndex++;
 			}
 			if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
-				const name = attribute[1];
-				const value = attribute[2] || attribute[3];
-				attributes.set(name.toLowerCase(), (value ? value : (options.xhtml ? name : "").toLowerCase()));
+				attributes.set(attribute[1].toLowerCase(), (attribute[2] || attribute[3] || "").toLowerCase());
 			}
 		}
 
@@ -254,8 +253,19 @@ module.exports = function(content) {
 			}
 		}
 
-		/* inject attributes to file content if available and return it */
-		return attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => `${attribute}="${attributes.get(attribute)}"`).join(" ")) : file.content;
+		/* inject attributes as Vue bindings to file content if available and return it */
+		return attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => {
+			let name = attribute;
+			let value = attributes.get(attribute);
+
+			value = value ? value : (options.xhtml ? name : "");
+			if(!PATTERN_ATTRIBUTE_NAME_VUE.test(name)) {
+				name = `v-bind:${name}`;
+				value = `'${value}'`;
+			}
+
+			return `${name}="${value}"`;
+		}).join(" ")) : file.content;
 
 	}).then(content => {
 
