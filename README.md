@@ -17,6 +17,8 @@
 
 ## Notable changes
 
+* v1.3.1
+	* Hotfixed issue with doubled attribute definitions on SVG node. This may introduce breaking changes for developers who used image definitions outside of template tag.
 * v1.3.0
 	* Added new option: [addAttributes](#configuration)
 * v1.2.17
