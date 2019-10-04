@@ -87,12 +87,12 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 // const PATTERN_SPRITE_KEYWORD; // will be defined dynamically based on keyword from options
 const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
 const PATTERN_BEFORE_ROOT_CLOSE_TAG = /(<template[^>]*>[\s\S]+)(\s*<\/[^>]+>[\s\S]*<\/template>)/i;
-const PATTERN_IMAGE_SRC_SVG = /<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>/gi;
+const PATTERN_IMAGE_SRC_SVG = /(["'])?<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>(["'])?/gi;
 const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
 const PATTERN_SVG_TAG = /^<svg[^>]*/i;
 const PATTERN_USE_TAG = /<use[^>]*/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
-const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z][a-z-]+[a-z]$/i;
+const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z](?:[a-z0-9-:]+(?:[a-z0-9])?)?$/i;
 const PATTERN_ATTRIBUTE_NAME_VUE = /^([:@]|v-bind:|v-on:).+$/i;
 const PATTERN_TAG = /^<|>$/;
 const PATTERN_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
@@ -166,7 +166,7 @@ module.exports = function(content) {
 	const symbols = new Set();
 
 	/* async replace */
-	replace(content, PATTERN_IMAGE_SRC_SVG, async (image, source) => {
+	replace(content, PATTERN_IMAGE_SRC_SVG, async (image, leftQuote, source, rightQuote) => {
 
 		/* check for keyword in strict mode */
 		if(options.inline.strict && !PATTERN_INLINE_KEYWORD.test(image)) {
@@ -254,7 +254,8 @@ module.exports = function(content) {
 		}
 
 		/* inject attributes as Vue bindings to file content if available and return it */
-		return attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => {
+		const quote = leftQuote && rightQuote && leftQuote === rightQuote ? "`" : "";
+		return quote + (attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => {
 			let name = attribute;
 			let value = attributes.get(attribute);
 
@@ -265,7 +266,7 @@ module.exports = function(content) {
 			}
 
 			return `${name}="${value}"`;
-		}).join(" ")) : file.content;
+		}).join(" ")) : file.content) + quote;
 
 	}).then(content => {
 
