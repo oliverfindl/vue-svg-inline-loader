@@ -92,8 +92,8 @@ const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
 const PATTERN_SVG_TAG = /^<svg[^>]*/i;
 const PATTERN_USE_TAG = /<use[^>]*/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
-const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z](?:[a-z0-9-:]+(?:[a-z0-9])?)?$/i;
-const PATTERN_ATTRIBUTE_NAME_VUE = /^([:@]|v-bind:|v-on:).+$/i;
+const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z](?:[a-z0-9-:]*[a-z0-9])?$/i;
+const PATTERN_ATTRIBUTE_NAME_VUE = /^([:@]|v-).+$/i;
 const PATTERN_TAG = /^<|>$/;
 const PATTERN_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
 
@@ -156,8 +156,8 @@ module.exports = function(content) {
 			throw new Error(`Keyword ${keyword} is not valid.`);
 		}
 	}
-	const PATTERN_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.inline.keyword}\\s+`, "i");
-	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?${options.sprite.keyword}\\s+`, "i");
+	const PATTERN_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?(?:v-)?${options.inline.keyword}\\s+`, "i");
+	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?(?:v-)?${options.sprite.keyword}\\s+`, "i");
 
 	/* initialize svgo */
 	const svgo = options._svgo && new SVGO(options.svgo === true ? DEFAULT_OPTIONS.svgo : options.svgo);
@@ -259,7 +259,7 @@ module.exports = function(content) {
 			let name = attribute;
 			let value = attributes.get(attribute);
 
-			value = value ? value : (options.xhtml ? name : "");
+			value = (value ? value : (options.xhtml ? name : "")).replace(/"/g, "'");
 			if(!PATTERN_ATTRIBUTE_NAME_VUE.test(name)) {
 				name = `v-bind:${name}`;
 				value = `'${value}'`;
