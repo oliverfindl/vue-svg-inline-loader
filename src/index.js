@@ -31,6 +31,7 @@ const DEFAULT_OPTIONS = freeze({
 		focusable: false,
 		tabindex: -1
 	},
+	addTitle: false,
 	md5: true,
 	xhtml: false,
 	svgo: { plugins: [ { removeViewBox: false } ] }
@@ -48,7 +49,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 			type: "object",
 			properties: {
 				keyword: { type: "string" },
-				strict: { type:"boolean" }
+				strict: { type: "boolean" }
 			},
 			additionalProperties: false
 		},
@@ -56,13 +57,14 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 			type: "object",
 			properties: {
 				keyword: { type: "string" },
-				strict: { type:"boolean" }
+				strict: { type: "boolean" }
 			},
 			additionalProperties: false
 		},
 		dataAttributes: { type: "array" },
 		removeAttributes: { type: "array" },
 		addAttributes: { type: "object" },
+		addTitle: { type: "boolean" },
 		md5: { type: "boolean" },
 		xhtml: { type: "boolean" },
 		svgo: {
@@ -89,6 +91,7 @@ const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)
 const PATTERN_BEFORE_ROOT_CLOSE_TAG = /(<template[^>]*>[\s\S]+)(\s*<\/[^>]+>[\s\S]*<\/template>)/i;
 const PATTERN_IMAGE_SRC_SVG = /(["'])?<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>(["'])?/gi;
 const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
+const PATTERN_SVG_TITLE = /<svg[^>]*>[\s\S]*(<title>[\s\S]+<\/title>)[\s\S]*<\/svg>/i;
 const PATTERN_SVG_TAG = /^<svg[^>]*/i;
 const PATTERN_USE_TAG = /<use[^>]*/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
@@ -207,17 +210,6 @@ module.exports = function(content) {
 			throw new Error(`SVGO for ${file.path} failed.`);
 		}
 
-		/* check for keyword in strict mode, check and handle svg as sprite */
-		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image)) && !PATTERN_USE_TAG.test(file.content)) {
-			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars, require-atomic-updates
-				const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
-				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
-				symbols.add(`<symbol id="${id}"${attributes}>${symbol}</symbol>`); // .has() is not neccessary
-
-				return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><use xlink:href="#${id}" href="#${id}"></use></svg>`;
-			});
-		}
-
 		/* create empty attributes map */
 		const attributes = new Map();
 
@@ -231,6 +223,23 @@ module.exports = function(content) {
 			if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
 				attributes.set(attribute[1].toLowerCase(), attribute[2] || attribute[3] || "");
 			}
+		}
+
+		/* transform alt attribute to title tag  */
+		if(options.addTitle && attributes.has("alt")) {
+			const alternativeTitle = attributes.get("alt");
+			file.content = PATTERN_SVG_TITLE.test(file.content) ? file.content.replace(PATTERN_SVG_TITLE, (svg, title) => svg.replace(title, `<title>${alternativeTitle}</title>`)) : file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => svg.replace(symbol, `<title>${alternativeTitle}</title>${symbol}`)); // eslint-disable-line no-unused-vars, require-atomic-updates
+		}
+
+		/* check for keyword in strict mode, check and handle svg as sprite */
+		if(options._sprites && (!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image)) && !PATTERN_USE_TAG.test(file.content)) {
+			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars, require-atomic-updates
+				const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
+				const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
+				symbols.add(`<symbol id="${id}"${attributes}>${symbol}</symbol>`); // .has() is not neccessary
+
+				return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><use xlink:href="#${id}" href="#${id}"></use></svg>`;
+			});
 		}
 
 		/* transform attributes to data-attributes */
