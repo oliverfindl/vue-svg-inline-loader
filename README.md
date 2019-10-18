@@ -17,6 +17,9 @@
 
 ## Notable changes
 
+* v1.3.4
+	* Added new option: [addTitle](#configuration)
+	* Fixed issue with lowercase-ing attribute values
 * v1.3.1
 	* Hotfixed issue with doubled attribute definitions on SVG node. This may introduce breaking changes for developers who used image definitions outside of template tag.
 * v1.3.0
@@ -202,6 +205,7 @@ Default options:
 		focusable: false,
 		tabindex: -1
 	},
+	addTitle: false,
 	md5: true,
 	xhtml: false,
 	svgo: true
@@ -239,6 +243,9 @@ Array of attributes which will be removed.
 
 * **addAttributes:**  
 Object of attributes which will be added.
+
+* **addTitle:**  
+Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][SVGO] by default).
 
 * **md5:**  
 Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext. Set it to `false` only for development purposes.
