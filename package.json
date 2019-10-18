@@ -47,7 +47,7 @@
 	"dependencies": {
 		"@babel/polyfill": "^7.6.0",
 		"@babel/runtime": "^7.6.3",
-		"core-js": "^2.6.9",
+		"core-js": "^2.6.10",
 		"loader-utils": "^1.2.3",
 		"svgo": "^1.3.0"
 	},
@@ -58,6 +58,6 @@
 		"@babel/preset-env": "^7.6.3",
 		"eslint": "^6.5.1",
 		"rimraf": "^3.0.0",
-		"schema-utils": "^2.4.1"
+		"schema-utils": "^2.5.0"
 	}
 }
