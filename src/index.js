@@ -229,7 +229,7 @@ module.exports = function(content) {
 				PATTERN_ATTRIBUTES.lastIndex++;
 			}
 			if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
-				attributes.set(attribute[1].toLowerCase(), (attribute[2] || attribute[3] || "").toLowerCase());
+				attributes.set(attribute[1].toLowerCase(), attribute[2] || attribute[3] || "");
 			}
 		}
 
