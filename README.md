@@ -17,7 +17,7 @@
 
 ## Notable changes
 
-* v1.3.4
+* v1.4.0
 	* Added new option: [addTitle](#configuration)
 	* Fixed issue with lowercase-ing attribute values
 * v1.3.1
