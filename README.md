@@ -245,7 +245,7 @@ Array of attributes which will be removed.
 Object of attributes which will be added.
 
 * **addTitle:**  
-Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][SVGO] by default).
+Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][SVGO] by default). This option has no effect while using inline SVG sprites.
 
 * **md5:**  
 Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext. Set it to `false` only for development purposes.
