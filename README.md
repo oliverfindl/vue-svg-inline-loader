@@ -185,6 +185,8 @@ Which replaces into:
 
 Loader won't parse any images with [Vue bindings](https://vuejs.org/v2/guide/class-and-style.html) used as `src` attribute [[more info](https://github.com/oliverfindl/vue-svg-inline-loader/issues/2)].
 
+If you need to preserve image tag (e.g. in comments), you can wrap it in hash (`#`) or triple backtick (` ``` `) characters.
+
 ## Configuration
 
 Default options:
