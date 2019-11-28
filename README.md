@@ -17,6 +17,8 @@
 
 ## Notable changes
 
+* v1.4.4
+	* Updated order of attributes operations
 * v1.4.0
 	* Added new option: [addTitle](#configuration)
 	* Fixed issue with lowercase-ing attribute values
@@ -200,14 +202,14 @@ Default options:
 		keyword: "svg-sprite",
 		strict: true
 	},
-	dataAttributes: [],
-	removeAttributes: ["alt", "src"],
+	addTitle: false,
 	addAttributes: {
 		role: "presentation",
 		focusable: false,
 		tabindex: -1
 	},
-	addTitle: false,
+	dataAttributes: [],
+	removeAttributes: ["alt", "src"],
 	md5: true,
 	xhtml: false,
 	svgo: true
