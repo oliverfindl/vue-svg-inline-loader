@@ -24,14 +24,14 @@ const DEFAULT_OPTIONS = freeze({
 		keyword: "svg-sprite",
 		strict: true
 	},
-	dataAttributes: [],
-	removeAttributes: ["alt", "src"],
+	addTitle: false,
 	addAttributes: {
 		role: "presentation",
 		focusable: false,
 		tabindex: -1
 	},
-	addTitle: false,
+	dataAttributes: [],
+	removeAttributes: ["alt", "src"],
 	md5: true,
 	xhtml: false,
 	svgo: { plugins: [ { removeViewBox: false } ] }
@@ -249,6 +249,13 @@ module.exports = function(content) {
 			file.content = PATTERN_SVG_TITLE.test(file.content) ? file.content.replace(PATTERN_SVG_TITLE, (svg, title) => svg.replace(title, `<title>${alternativeTitle}</title>`)) : file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => svg.replace(symbol, `<title>${alternativeTitle}</title>${symbol}`)); // eslint-disable-line no-unused-vars, require-atomic-updates
 		}
 
+		/* add attributes if not present */
+		for(const attribute in options.addAttributes) {
+			if(!attributes.has(attribute)) {
+				attributes.set(attribute, options.addAttributes[attribute].toString());
+			}
+		}
+
 		/* transform attributes to data-attributes */
 		for(const attribute of options.dataAttributes) {
 			if(attributes.has(attribute)) {
@@ -260,13 +267,6 @@ module.exports = function(content) {
 		/* remove unwanted attributes */
 		for(const attribute of options.removeAttributes) {
 			attributes.delete(attribute); // .has() is not neccessary
-		}
-
-		/* add attributes if not present */
-		for(const attribute in options.addAttributes) {
-			if(!attributes.has(attribute)) {
-				attributes.set(attribute, options.addAttributes[attribute].toString());
-			}
 		}
 
 		/* overwrite wrapping quotes with backticks */
