@@ -1,5 +1,5 @@
 /**
- * vue-svg-inline-loader v1.4.3 (2019-10-24)
+ * vue-svg-inline-loader v1.4.4 (2019-11-28)
  * Copyright 2019 Oliver Findl
  * @license MIT
  */
@@ -90,6 +90,8 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
 const PATTERN_BEFORE_ROOT_CLOSE_TAG = /(<template[^>]*>[\s\S]+)(\s*<\/[^>]+>[\s\S]*<\/template>)/i;
 const PATTERN_IMAGE_SRC_SVG = /(["']|#|`{3})?<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>(["']|#|`{3})?/gi;
+// const PATTERN_SVG_WHITESPACE = /((?:\r?\n)+|\t+|  +)/g;
+// const PATTERN_SVG_WHITESPACE_TAGS = />\s+</g;
 const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
 const PATTERN_SVG_TITLE = /<svg[^>]*>[\s\S]*(<title>[\s\S]*<\/title>)[\s\S]*<\/svg>/i;
 const PATTERN_SVG_TAG = /^<svg[^>]*/i;
@@ -217,6 +219,9 @@ module.exports = function(content) {
 		} catch(error) {
 			throw new Error(`SVGO for ${file.path} failed.`);
 		}
+
+		/* remove unnecessary whispace from svg */
+		// file.content = file.content.replace(PATTERN_SVG_WHITESPACE, " ").replace(PATTERN_SVG_WHITESPACE_TAGS, "><").trim();
 
 		/* create empty attributes map */
 		const attributes = new Map();
