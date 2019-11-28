@@ -7,6 +7,6 @@
     "explore": "gridsome explore"
   },
   "dependencies": {
-    "gridsome": "^0.7.8"
+    "gridsome": "^0.7.11"
   }
 }

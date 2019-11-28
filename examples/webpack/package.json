@@ -18,17 +18,17 @@
     "not ie <= 8"
   ],
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
     "babel-loader": "^8.0.6",
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
-    "file-loader": "^4.2.0",
-    "vue-loader": "^15.7.1",
+    "file-loader": "^5.0.2",
+    "vue-loader": "^15.7.2",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9",
+    "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
   }
 }
