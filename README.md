@@ -260,9 +260,21 @@ In XHTML mode attribute minimization is forbidden. Empty attributes are filled w
 * **svgo:**  
 Pass [SVGO][SVGO] configuration object (documentation can be found [here][SVGO]) or `true` for default configuration. Pass `null` or `false` to disable SVG optimization.
 
-### Notice
+### Notices
 
-User-defined options are deep-merged with default options. Arrays are not concatenated.
+* User-defined options are deep-merged with default options. Arrays are not concatenated.
+
+## Examples
+
+* [gridsome example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/gridsome)
+
+* [nuxt example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/nuxt)
+
+* [quasar example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/quasar)
+
+* [vue-cli example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/vue-cli)
+
+* [webpack example](https://github.com/oliverfindl/vue-svg-inline-loader/tree/master/examples/webpack)
 
 ---
 
