@@ -97,7 +97,7 @@ const PATTERN_SVG_TITLE = /<svg[^>]*>[\s\S]*(<title>[\s\S]*<\/title>)[\s\S]*<\/s
 const PATTERN_SVG_TAG = /^<svg[^>]*/i;
 const PATTERN_USE_TAG = /<use[^>]*/i;
 const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
-const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z](?:[a-z0-9-:]*[a-z0-9])?$/i;
+const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z](?:[a-z0-9-:.]*[a-z0-9])?$/i;
 const PATTERN_ATTRIBUTE_NAME_VUE = /^([:@]|v-).+$/i;
 const PATTERN_TAG = /^<|>$/;
 const PATTERN_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
