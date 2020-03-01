@@ -1,15 +1,15 @@
 # vue-svg-inline-loader
 
-[![npm](https://img.shields.io/npm/v/vue-svg-inline-loader.svg?style=flat)](https://www.npmjs.com/package/vue-svg-inline-loader)
-[![npm](https://img.shields.io/npm/dt/vue-svg-inline-loader.svg?style=flat)](https://www.npmjs.com/package/vue-svg-inline-loader)
-[![npm](https://img.shields.io/npm/l/vue-svg-inline-loader.svg?style=flat)](https://www.npmjs.com/package/vue-svg-inline-loader)
+[![version](https://img.shields.io/npm/v/vue-svg-inline-loader.svg?style=flat)][npm]
+[![downloads](https://img.shields.io/npm/dt/vue-svg-inline-loader.svg?style=flat)][npm]
+[![license](https://img.shields.io/npm/l/vue-svg-inline-loader.svg?style=flat)][mit]
 [![paypal](https://img.shields.io/badge/donate-paypal-blue.svg?colorB=0070ba&style=flat)](https://paypal.me/oliverfindl)
 
 [Webpack](https://github.com/webpack/webpack) loader used for inline replacement of SVG images with actual content of SVG files in [Vue](https://github.com/vuejs/vue) projects.
 
 > Loader parses only HTML template format.
 
-> Loader has built-in [SVGO][SVGO] support for SVG optimization.
+> Loader has built-in [SVGO][svgo] support for SVG optimization.
 
 > Sprite option works only with [Vue Single File Component](https://vuejs.org/guide/single-file-components.html) approach.
 
@@ -60,7 +60,7 @@
 
 ## Install
 
-Via [npm](https://npmjs.com/) [[package](https://www.npmjs.com/package/vue-svg-inline-loader)]:
+Via [npm](https://npmjs.com/) [[package][npm]]:
 ```bash
 $ npm install vue-svg-inline-loader --save-dev
 ```
@@ -249,7 +249,7 @@ Array of attributes which will be removed.
 Object of attributes which will be added.
 
 * **addTitle:**  
-Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][SVGO] by default). This option has no effect while using inline SVG sprites.
+Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][svgo] by default). This option has no effect while using inline SVG sprites.
 
 * **md5:**  
 Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext. Set it to `false` only for development purposes.
@@ -258,7 +258,7 @@ Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext.
 In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g. `disabled="disabled"`).
 
 * **svgo:**  
-Pass [SVGO][SVGO] configuration object (documentation can be found [here][SVGO]) or `true` for default configuration. Pass `null` or `false` to disable SVG optimization.
+Pass [SVGO][svgo] configuration object (documentation can be found [here][svgo]) or `true` for default configuration. Pass `null` or `false` to disable SVG optimization.
 
 ### Notices
 
@@ -280,6 +280,8 @@ Pass [SVGO][SVGO] configuration object (documentation can be found [here][SVGO])
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT)
+[MIT][mit]
 
-[SVGO]: https://github.com/svg/svgo
+[mit]: https://opensource.org/licenses/MIT
+[npm]: https://www.npmjs.com/package/vue-svg-inline-loader
+[svgo]: https://github.com/svg/svgo
