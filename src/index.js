@@ -34,7 +34,8 @@ const DEFAULT_OPTIONS = freeze({
 	removeAttributes: ["alt", "src"],
 	md5: true,
 	xhtml: false,
-	svgo: { plugins: [ { removeViewBox: false } ] }
+	svgo: { plugins: [ { removeViewBox: false } ] },
+	verbose: false
 });
 
 /* define validation schema object for options */
@@ -79,7 +80,8 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 			}, {
 				enum: [null]
 			}]
-		}
+		},
+		verbose: { type: "boolean" }
 	},
 	additionalProperties: false
 });
@@ -203,9 +205,19 @@ module.exports = function(content) {
 
 		/* load file content into file object */
 		try {
-			file.content = readFileSync(file.path, { encoding: "utf-8" });
+			file.content = readFileSync(file.path, { encoding: "utf-8" }).trim();
 		} catch(error) {
 			throw new Error(`File ${file.path} does not exist.`);
+		}
+
+		/* log image */
+		if(options.verbose) {
+			console.log("before replace:\t%s", image);
+		}
+
+		/* log svg */
+		if(options.verbose) {
+			console.log("before replace:\t%s", file.content);
 		}
 
 		/* check if svg content is not empty */
@@ -279,8 +291,8 @@ module.exports = function(content) {
 			leftQuote = rightQuote = "`";
 		}
 
-		/* inject attributes as Vue bindings to file content if available and return it */
-		return (leftQuote || "") + (attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => {
+		/* inject attributes as Vue bindings to file content if available */
+		file.content = (leftQuote || "") + (attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => {
 			let name = attribute;
 			let value = attributes.get(attribute);
 
@@ -292,6 +304,15 @@ module.exports = function(content) {
 
 			return `${name}="${value}"`;
 		}).join(" ")) : file.content) + (rightQuote || "");
+
+		/* log svg */
+		if(options.verbose) {
+			console.log("after replace:\t%s", file.content);
+			console.log(); // new line
+		}
+
+		/* return file content */
+		return file.content;
 
 	}).then(content => {
 
