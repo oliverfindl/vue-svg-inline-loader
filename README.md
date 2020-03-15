@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/npm/l/vue-svg-inline-loader.svg?style=flat)][mit]
 [![paypal](https://img.shields.io/badge/donate-paypal-blue.svg?colorB=0070ba&style=flat)](https://paypal.me/oliverfindl)
 
-[Webpack](https://github.com/webpack/webpack) loader used for inline replacement of SVG images with actual content of SVG files in [Vue](https://github.com/vuejs/vue) projects.
+[Webpack](https://github.com/webpack/webpack) loader used for inline replacement of SVG images with actual content of SVG files in [Vue][vue] projects.
 
 > Loader parses only HTML template format.
 
@@ -17,6 +17,9 @@
 
 ## Notable changes
 
+* v1.5.0
+	* Added new option: [transformImageAttributesToVueDirectives](#configuration)
+	* Added new option: [verbose](#configuration)
 * v1.4.4
 	* Updated order of attributes operations
 * v1.4.0
@@ -185,7 +188,7 @@ Which replaces into:
 
 ### Notice
 
-Loader won't parse any images with [Vue bindings](https://vuejs.org/v2/guide/class-and-style.html) used as `src` attribute [[more info](https://github.com/oliverfindl/vue-svg-inline-loader/issues/2)].
+Loader won't parse any images with [Vue bindings][vue-bindings] used as `src` attribute [[more info](https://github.com/oliverfindl/vue-svg-inline-loader/issues/2)].
 
 If you need to preserve image tag (e.g. in comments), you can wrap it in hash (`#`) or triple backtick (` ``` `) characters.
 
@@ -210,9 +213,10 @@ Default options:
 	},
 	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
+	transformImageAttributesToVueDirectives: true,
 	md5: true,
 	xhtml: false,
-	svgo: true
+	svgo: true,
 /* value true for svgo option is alias for:
 	svgo: {
 		plugins: [
@@ -220,8 +224,9 @@ Default options:
 				removeViewBox: false
 			}
 		]
-	}
+	},
 */
+	verbose: false
 }
 ```
 Explanation:
@@ -251,6 +256,9 @@ Object of attributes which will be added.
 * **addTitle:**  
 Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][svgo] by default). This option has no effect while using inline SVG sprites.
 
+* **transformImageAttributesToVueDirectives:**  
+Transforms all non-[Vue][vue] image tag attributes to attributes set via [Vue][vue] `v-bind` directive. With this option enabled, [Vue][vue] will handle merge / replace attributes, that are present on both resources - image tag and SVG tag. This might cause issues, when using [Vue bindings][vue-bindings] on image tag attribute, that is also present on SVG tag (e.g.: class attribute). Please use [verbose](#configuration) option for local debugging before submitting new issue.
+
 * **md5:**  
 Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext. Set it to `false` only for development purposes.
 
@@ -259,6 +267,9 @@ In XHTML mode attribute minimization is forbidden. Empty attributes are filled w
 
 * **svgo:**  
 Pass [SVGO][svgo] configuration object (documentation can be found [here][svgo]) or `true` for default configuration. Pass `null` or `false` to disable SVG optimization.
+
+* **verbose:**  
+Will print image tag, SVG tag and modified SVG tag (with attributes from image tag) for debugging purposes.
 
 ### Notices
 
@@ -285,3 +296,5 @@ Pass [SVGO][svgo] configuration object (documentation can be found [here][svgo])
 [mit]: https://opensource.org/licenses/MIT
 [npm]: https://www.npmjs.com/package/vue-svg-inline-loader
 [svgo]: https://github.com/svg/svgo
+[vue]: https://github.com/vuejs/vue
+[vue-bindings]: https://vuejs.org/v2/guide/class-and-style.html
