@@ -32,6 +32,7 @@ const DEFAULT_OPTIONS = freeze({
 	},
 	dataAttributes: [],
 	removeAttributes: ["alt", "src"],
+	transformImageAttributesToVueDirectives: true,
 	md5: true,
 	xhtml: false,
 	svgo: { plugins: [ { removeViewBox: false } ] },
@@ -66,6 +67,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 		removeAttributes: { type: "array" },
 		addAttributes: { type: "object" },
 		addTitle: { type: "boolean" },
+		transformImageAttributesToVueDirectives: { type: "boolean" },
 		md5: { type: "boolean" },
 		xhtml: { type: "boolean" },
 		svgo: {
@@ -297,7 +299,7 @@ module.exports = function(content) {
 			let value = attributes.get(attribute);
 
 			value = (value ? value : (options.xhtml ? name : "")).replace(/"/g, "'");
-			if(!PATTERN_ATTRIBUTE_NAME_VUE.test(name)) {
+			if(options.transformImageAttributesToVueDirectives && !PATTERN_ATTRIBUTE_NAME_VUE.test(name)) {
 				name = `v-bind:${name}`;
 				value = `'${value}'`;
 			}
