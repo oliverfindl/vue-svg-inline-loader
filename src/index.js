@@ -63,10 +63,10 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 			},
 			additionalProperties: false
 		},
+		addTitle: { type: "boolean" },
+		addAttributes: { type: "object" },
 		dataAttributes: { type: "array" },
 		removeAttributes: { type: "array" },
-		addAttributes: { type: "object" },
-		addTitle: { type: "boolean" },
 		transformImageAttributesToVueDirectives: { type: "boolean" },
 		md5: { type: "boolean" },
 		xhtml: { type: "boolean" },
