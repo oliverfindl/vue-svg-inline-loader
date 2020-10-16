@@ -15,6 +15,12 @@
 
 ---
 
+### Vue CLI
+
+[Vue 3](https://v3.vuejs.org/) projects created via [Vue CLI](https://cli.vuejs.org/) aren't built on top of [Webpack](https://github.com/webpack/webpack), they use Vite (which is build on top of [Rollup](https://rollupjs.org/)) instead. In this case, this loader won't work. Please take a look at [vue-svg-inline-plugin](https://github.com/oliverfindl/vue-svg-inline-plugin), which works similar to this loader.
+
+---
+
 ## Notable changes
 
 * v1.5.0
