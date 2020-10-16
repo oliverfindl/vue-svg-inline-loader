@@ -11,7 +11,7 @@ const path = require("path");
 const crypto = require("crypto");
 const { readFileSync } = require("fs");
 const { getOptions } = require("loader-utils");
-const { validate } = require("schema-utils");
+const { validate: validateOptions } = require("schema-utils");
 const SVGO = require("svgo");
 
 /* define default options object */
@@ -151,7 +151,7 @@ module.exports = function(content) {
 			});
 		});
 	});
-	validate(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
+	validateOptions(DEFAULT_OPTIONS_SCHEMA, options, "vue-svg-inline-loader");
 
 	/* check if SVGO can be used */
 	options._svgo = !!options.svgo;
