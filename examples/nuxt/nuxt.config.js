@@ -1,63 +1,45 @@
 const { join } = require('path')
-const pkg = require('./package')
 
-module.exports = {
-
-  /*
-  ** Headers of the page
-  */
+export default {
+  // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: pkg.name,
+    title: 'nuxt',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: '' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
 
-  /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#fff' },
-
-  /*
-  ** Global CSS
-  */
+  // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
   ],
 
-  /*
-  ** Plugins to load before mounting the App
-  */
+  // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
   ],
 
-  /*
-  ** Nuxt.js modules
-  */
-  modules: [
+  // Auto import components (https://go.nuxtjs.dev/config-components)
+  components: true,
+
+  // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
+  buildModules: [
+    // https://go.nuxtjs.dev/eslint
+    '@nuxtjs/eslint-module'
   ],
 
-  /*
-  ** Build configuration
-  */
+  // Modules (https://go.nuxtjs.dev/config-modules)
+  modules: [
+    // https://go.nuxtjs.dev/pwa
+    '@nuxtjs/pwa'
+  ],
+
+  // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
-    /*
-    ** You can extend webpack config here
-    */
     extend(config, ctx) {
-      // Run ESLint on save
-      if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
-      }
       config.module.rules.push({
         test: /\.vue$/,
 //      loader: "vue-svg-inline-loader", // in your project

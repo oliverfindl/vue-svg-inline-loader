@@ -1,24 +1,25 @@
 {
-  "name": "nuxt-example",
+  "name": "nuxt",
   "version": "1.0.0",
-  "description": "My divine Nuxt.js project",
-  "author": "",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "precommit": "npm run lint"
+    "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint": "npm run lint:js"
   },
   "dependencies": {
-    "nuxt": "^2.14.7"
+    "@nuxtjs/pwa": "^3.0.2",
+    "core-js": "^3.6.5",
+    "nuxt": "^2.14.6"
   },
   "devDependencies": {
+    "@nuxtjs/eslint-config": "^3.1.0",
+    "@nuxtjs/eslint-module": "^2.0.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.11.0",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-vue": "^7.0.1"
+    "eslint": "^7.10.0",
+    "eslint-plugin-nuxt": "^1.0.0"
   }
 }

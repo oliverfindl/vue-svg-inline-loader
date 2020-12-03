@@ -1,24 +1,16 @@
 <template>
-  <section class="container">
+  <div class="container">
     <div>
-      <img
-        svg-inline
-        svg-sprite
-        alt="Vue logo"
-        src="~/assets/logo.svg"
-        class="vue-logo"
-      >
-      <logo />
+      <img svg-inline svg-sprite src="../assets/logo.svg" alt="Vue logo" class="vue-logo">
+      <Logo />
       <h1 class="title">
         nuxt
       </h1>
-      <h2 class="subtitle">
-        My divine Nuxt.js project
-      </h2>
       <div class="links">
         <a
           href="https://nuxtjs.org/"
           target="_blank"
+          rel="noopener noreferrer"
           class="button--green"
         >
           Documentation
@@ -26,28 +18,23 @@
         <a
           href="https://github.com/nuxt/nuxt.js"
           target="_blank"
+          rel="noopener noreferrer"
           class="button--grey"
         >
           GitHub
         </a>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
-export default {
-  components: {
-    Logo
-  }
-}
+export default {}
 </script>
 
 <style>
-
 .container {
+  margin: 0 auto;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -56,8 +43,16 @@ export default {
 }
 
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    'Quicksand',
+    'Source Sans Pro',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
