@@ -23,6 +23,10 @@
 
 ## Notable changes
 
+* v2.0.0
+	* Removed transpiled version
+	* Removed [core-js](https://github.com/zloirock/core-js)@2 dependency
+	* Recreated all examples (except vanilla Webpack one) with up-to-date CLIs
 * v1.5.0
 	* Added new option: [transformImageAttributesToVueDirectives](#configuration)
 	* Added new option: [verbose](#configuration)
@@ -250,20 +254,20 @@ In case of some conflicts, you can also use data version of your keyword (e.g. `
 * **sprite.strict:**  
 In strict mode loader replaces only images with defined keyword. If strict mode is disabled, loader replaces all images.
 
+* **addTitle:**  
+Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][svgo] by default). This option has no effect while using inline SVG sprites.
+
+* **addAttributes:**  
+Object of attributes which will be added.
+
 * **dataAttributes:**  
 Array of attributes which will be renamed to data-attributes.
 
 * **removeAttributes:**  
 Array of attributes which will be removed.
 
-* **addAttributes:**  
-Object of attributes which will be added.
-
-* **addTitle:**  
-Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][svgo] by default). This option has no effect while using inline SVG sprites.
-
 * **transformImageAttributesToVueDirectives:**  
-Transforms all non-[Vue][vue] image tag attributes to attributes set via [Vue][vue] `v-bind` directive. With this option enabled, [Vue][vue] will handle merge / replace attributes, that are present on both resources - image tag and SVG tag. This might cause issues, when using [Vue bindings][vue-bindings] on image tag attribute, that is also present on SVG tag (e.g.: class attribute). Please use [verbose](#configuration) option for local debugging before submitting new issue.
+Transforms all non-[Vue][vue] image tag attributes via [Vue][vue] `v-bind` directive. With this option enabled, [Vue][vue] will handle merge / replace attributes, that are present on both resources - image tag and SVG tag. This might cause issues, when using [Vue bindings][vue-bindings] on image tag attribute, that is also present on SVG tag (e.g.: class attribute). Please use [verbose](#configuration) option for local debugging before submitting new issue.
 
 * **md5:**  
 Use md5-encoded resource path as ID for inline SVG sprites instead of plaintext. Set it to `false` only for development purposes.
