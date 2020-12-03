@@ -1,7 +1,7 @@
 <template>
   <Layout>
 
-    <img svg-inline svg-sprite alt="Vue logo" src="~/assets/logo.svg" class="vue-logo" />
+    <img svg-inline svg-sprite alt="Vue logo" src="../assets/logo.svg" class="vue-logo" />
     <!-- Learn how to use images here: https://gridsome.org/docs/images -->
     <g-image alt="Example image" src="~/favicon.png" width="135" />
 
@@ -12,7 +12,7 @@
     </p>
 
     <p class="home-links">
-      <a href="https://gridsome.org/docs" target="_blank" rel="noopener">Gridsome Docs</a>
+      <a href="https://gridsome.org/docs/" target="_blank" rel="noopener">Gridsome Docs</a>
       <a href="https://github.com/gridsome/gridsome" target="_blank" rel="noopener">GitHub</a>
     </p>
 
@@ -30,5 +30,9 @@ export default {
 <style>
 .home-links a {
   margin-right: 1rem;
+}
+
+svg.vue-logo {
+  width: 200px; height: 200px;
 }
 </style>
