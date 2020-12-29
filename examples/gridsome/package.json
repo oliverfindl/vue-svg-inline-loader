@@ -1,5 +1,5 @@
 {
-  "name": "gridsome",
+  "name": "gridsome-example",
   "private": true,
   "scripts": {
     "build": "gridsome build",
