@@ -23,6 +23,8 @@
 
 ## Notable changes
 
+* v2.1.0
+	* Added new option: [cloneAttributes](#configuration)
 * v2.0.0
 	* Removed transpiled version
 	* Removed [core-js](https://github.com/zloirock/core-js)@2 dependency
