@@ -49,7 +49,7 @@
 	 * Fixed a bug where original svg attributes were used by referencing svg rather than symbol itself. This may introduce breaking changes for developers who rely on this bugged behavior.
 * v1.2.6
 	* Modified default value of [svgo](#configuration) option to preserve viewBox attribute
-	* Modified [svgo](#configuration) option to accept `true` value as alias for default [configuration]((#configuration))
+	* Modified [svgo](#configuration) option to accept `true` value as alias for default [configuration](#configuration)
 * v1.2.5
 	* Modified [svgo](#configuration) option to accept `null` or `false` value for disabling SVG optimization
 * v1.2.3
