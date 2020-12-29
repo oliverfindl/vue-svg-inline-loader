@@ -25,6 +25,7 @@ const DEFAULT_OPTIONS = freeze({
 		strict: true
 	},
 	addTitle: false,
+	cloneAttributes: ["viewbox"],
 	addAttributes: {
 		role: "presentation",
 		focusable: false,
@@ -64,6 +65,7 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 			additionalProperties: false
 		},
 		addTitle: { type: "boolean" },
+		cloneAttributes: { type: "array" },
 		addAttributes: { type: "object" },
 		dataAttributes: { type: "array" },
 		removeAttributes: { type: "array" },
@@ -143,7 +145,7 @@ module.exports = function(content) {
 		overwrite: true,
 		skipUndefined: true
 	}, DEFAULT_OPTIONS, loaderOptions);
-	["dataAttributes", "removeAttributes"].forEach(option => {
+	["cloneAttributes", "dataAttributes", "removeAttributes"].forEach(option => {
 		options[option] = options[option].map(attribute => attribute.toLowerCase());
 		options[option].forEach(attribute => {
 			[":", "@"].forEach(shorthand => {
@@ -237,30 +239,27 @@ module.exports = function(content) {
 		/* remove unnecessary whispace from svg */
 		// file.content = file.content.replace(PATTERN_SVG_WHITESPACE, " ").replace(PATTERN_SVG_WHITESPACE_TAGS, "><").trim();
 
-		/* create empty attributes map */
-		const attributes = new Map();
-
-		/* parse attributes */
-		let attribute;
-		PATTERN_ATTRIBUTES.lastIndex = 0;
-		while(attribute = PATTERN_ATTRIBUTES.exec(image)) { // eslint-disable-line no-cond-assign
-			if(attribute.index === PATTERN_ATTRIBUTES.lastIndex) {
-				PATTERN_ATTRIBUTES.lastIndex++;
-			}
-			if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
-				attributes.set(attribute[1].toLowerCase(), attribute[2] || attribute[3] || "");
-			}
-		}
+		/* create attributes map */
+		const attributes = createAttributeMap(image);
 
 		/* handle svg as sprite or transform alt attribute to title tag if enabled in options */
-		if((!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image))) {
+		if(!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image)) {
 			if(options._sprites && !PATTERN_USE_TAG.test(file.content)) {
 				file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars, require-atomic-updates
+
+					/* create unique id for svg based on svg file path */
 					const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
 					const id = [options.sprite.keyword, options.md5 ? crypto.createHash("md5").update(developmentId).digest("hex") : developmentId].join(options.md5 ? "-" : ":");
+
+					/* add svg into symbol set */
 					symbols.add(`<symbol id="${id}"${attributes}>${symbol}</symbol>`); // .has() is not neccessary
 
-					return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><use xlink:href="#${id}" href="#${id}"></use></svg>`;
+					/* create attribute map if necessary */
+					const _attributes = options.cloneAttributes.length ? createAttributeMap(attributes) : null;
+
+					/* return svg link */
+					return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"${options.cloneAttributes.length ? ` ${options.cloneAttributes.filter(attribute => !!attribute && _attributes.has(attribute)).map(attribute => `${attribute}="${_attributes.get(attribute)}"`).join(" ")}` : "" }><use xlink:href="#${id}" href="#${id}"></use></svg>`;
+
 				});
 			}
 		} else if(options.addTitle && attributes.has("alt")) {
@@ -344,6 +343,28 @@ async function replace(string, regex, callback) {
 
 	/* replace all data */
 	return data.length ? string.replace(regex, () => data.shift()) : string;
+}
+
+function createAttributeMap(string) {
+
+	/* create empty attribute map */
+	const attributes = new Map();
+
+	/* parse attributes into attribute map */
+	let attribute;
+	PATTERN_ATTRIBUTES.lastIndex = 0;
+	while(attribute = PATTERN_ATTRIBUTES.exec(string)) { // eslint-disable-line no-cond-assign
+		if(attribute.index === PATTERN_ATTRIBUTES.lastIndex) {
+			PATTERN_ATTRIBUTES.lastIndex++;
+		}
+		if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
+			attributes.set(attribute[1].toLowerCase(), attribute[2] || attribute[3] || "");
+		}
+	}
+
+	/* return parsed attribute map */
+	return attributes;
+
 }
 
 /* object deep freeze function */
