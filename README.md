@@ -216,6 +216,7 @@ Default options:
 		strict: true
 	},
 	addTitle: false,
+	cloneAttributes: ["viewbox"],
 	addAttributes: {
 		role: "presentation",
 		focusable: false,
@@ -256,6 +257,9 @@ In strict mode loader replaces only images with defined keyword. If strict mode 
 
 * **addTitle:**  
 Transform image `alt` attribute into SVG `title` tag, if not defined (removed with [SVGO][svgo] by default). This option has no effect while using inline SVG sprites.
+
+* **cloneAttributes:**  
+Array of attributes which will be cloned into SVG link node while using inline SVG sprites.
 
 * **addAttributes:**  
 Object of attributes which will be added.
