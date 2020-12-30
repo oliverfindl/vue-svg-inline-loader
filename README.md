@@ -173,7 +173,7 @@ Basic inline SVG usage with `svg-inline` keyword directive:
 
 Which replaces into:
 ```xml
-<svg svg-inline class="icon" focusable="false" role="presentation" tabindex="-1" xmlns="http://www.w3.org/2000/svg" viewBox="...">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="..." svg-inline role="presentation" focusable="false" tabindex="-1" class="icon">
 	<path d="..."></path>
 </svg>
 ```
@@ -185,7 +185,7 @@ Basic inline SVG sprite usage with `svg-sprite` keyword directive:
 
 Which replaces into:
 ```xml
-<svg svg-inline svg-sprite class="icon" focusable="false" role="presentation" tabindex="-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="..." svg-inline svg-sprite role="presentation" focusable="false" tabindex="-1" class="icon">
 	<use xlink:href="#svg-sprite-md5hash" href="#svg-sprite-md5hash"></use>
 </svg>
 <!-- ... -->
