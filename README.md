@@ -130,20 +130,41 @@ module.exports = {
 ```
 
 With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/extend-webpack#how-to-extend-webpack-config-):  
-With [quasar](https://quasar.dev/) - [quasar.conf.js](https://quasar.dev/quasar-cli/cli-documentation/handling-webpack#Usage-with-quasar.conf.js):  
 ```javascript
-// nuxt, quasar
+// nuxt
 
 module.exports = {
 	build: {
-		// use extend() method for nuxt
-		// use extendWebpack() method for quasar
-		extendWebpack(config, { isServer, isClient }) {
-			config.module.rules.push({
-				test: /\.vue$/,
+		extend(config) {
+			const vueRule = config.module.rules.find(({ test }) => test.toString() === /\.vue$/i.toString());
+			vueRule.use = [
+				{
+					loader: vueRule.loader,
+					options: vueRule.options
+				}, {
+					loader: "vue-svg-inline-loader",
+					options: { /* ... */ }
+				}
+			];
+			delete vueRule.loader;
+			delete vueRule.options;
+		}
+	}
+};
+```
+
+With [quasar](https://quasar.dev/) - [quasar.conf.js](https://quasar.dev/quasar-cli/cli-documentation/handling-webpack#Usage-with-quasar.conf.js):  
+```javascript
+// quasar
+
+module.exports = {
+	build: {
+		extendWebpack(config) {
+			const vueRule = config.module.rules.find(({ test }) => test.toString() === /\.vue$/.toString());
+			vueRule.use.push({
 				loader: "vue-svg-inline-loader",
 				options: { /* ... */ }
-			})
+			});
 		}
 	}
 };
