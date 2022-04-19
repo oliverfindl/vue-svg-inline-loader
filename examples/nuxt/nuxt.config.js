@@ -40,12 +40,19 @@ export default {
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     extend(config, ctx) {
-      config.module.rules.push({
-        test: /\.vue$/,
-//      loader: "vue-svg-inline-loader", // in your project
-        loader: join(__dirname, '../../index.js'),
-        options: { /* ... */ }
-      })
+      const vueRule = config.module.rules.find(({ test }) => test.toString() === /\.vue$/i.toString());
+      vueRule.use = [
+        {
+          loader: vueRule.loader,
+          options: vueRule.options
+        }, {
+//        loader: "vue-svg-inline-loader", // in your project
+          loader: join(__dirname, '../../index.js'),
+          options: { /* ... */ }
+        }
+      ];
+      delete vueRule.loader;
+      delete vueRule.options;
     }
   }
 }

@@ -70,13 +70,14 @@ module.exports = function (/* ctx */) {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /node_modules/
-        })
-        cfg.module.rules.push({
-          test: /\.vue$/,
+        });
+
+        const vueRule = cfg.module.rules.find(({ test }) => test.toString() === /\.vue$/.toString());
+        vueRule.use.push({
 //        loader: "vue-svg-inline-loader", // in your project
           loader: join(__dirname, '../../index.js'),
           options: { /* ... */ }
-        })
+        });
       }
     },
 
