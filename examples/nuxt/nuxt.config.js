@@ -28,31 +28,18 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    // 'vue-svg-loader/nuxt' // in a real project
+    '@/modules/vue-svg-inline-loader' // for this demo
   ],
+
+  svgInlineLoader: {
+    /* options */
+  },
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa'
-  ],
-
-  // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {
-    extend(config, ctx) {
-      const vueRule = config.module.rules.find(({ test }) => test.toString() === /\.vue$/i.toString());
-      vueRule.use = [
-        {
-          loader: vueRule.loader,
-          options: vueRule.options
-        }, {
-//        loader: "vue-svg-inline-loader", // in your project
-          loader: join(__dirname, '../../index.js'),
-          options: { /* ... */ }
-        }
-      ];
-      delete vueRule.loader;
-      delete vueRule.options;
-    }
-  }
+  ]
 }

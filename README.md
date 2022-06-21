@@ -134,21 +134,11 @@ With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/exten
 // nuxt
 
 module.exports = {
-	build: {
-		extend(config) {
-			const vueRule = config.module.rules.find(({ test }) => test.toString() === /\.vue$/i.toString());
-			vueRule.use = [
-				{
-					loader: vueRule.loader,
-					options: vueRule.options
-				}, {
-					loader: "vue-svg-inline-loader",
-					options: { /* ... */ }
-				}
-			];
-			delete vueRule.loader;
-			delete vueRule.options;
-		}
+	buildModules: ['vue-svg-inline-loader/nuxt', { /* options */ }],
+	// or
+	buildModules: ['vue-svg-inline-loader/nuxt'],
+	svgInlineLoader: {
+		/* options */
 	}
 };
 ```
