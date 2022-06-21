@@ -29,7 +29,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    // 'vue-svg-loader/nuxt' // in a real project
+    // 'vue-svg-inline-loader/nuxt' // in a real project
     '@/modules/vue-svg-inline-loader' // for this demo
   ],
 
