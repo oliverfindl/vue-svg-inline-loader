@@ -134,7 +134,7 @@ With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/exten
 // nuxt
 
 module.exports = {
-	buildModules: ['vue-svg-inline-loader/nuxt', { /* options */ }],
+	buildModules: [ [ 'vue-svg-inline-loader/nuxt', { /* options */ } ] ],
 	// or
 	buildModules: ['vue-svg-inline-loader/nuxt'],
 	svgInlineLoader: {
