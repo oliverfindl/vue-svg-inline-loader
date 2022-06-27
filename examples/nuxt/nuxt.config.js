@@ -33,7 +33,7 @@ export default {
     '@/modules/vue-svg-inline-loader' // for this demo
   ],
 
-  svgInlineLoader: {
+  vueSvgInlineLoader: {
     /* options */
   },
 

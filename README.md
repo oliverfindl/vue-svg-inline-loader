@@ -137,7 +137,7 @@ module.exports = {
 	buildModules: [ [ 'vue-svg-inline-loader/nuxt', { /* options */ } ] ],
 	// or
 	buildModules: ['vue-svg-inline-loader/nuxt'],
-	svgInlineLoader: {
+	vuesvgInlineLoader: {
 		/* options */
 	}
 };

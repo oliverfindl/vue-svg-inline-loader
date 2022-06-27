@@ -3,7 +3,7 @@ const { join } = require("path");
 export default function vueSvgInlineLoaderModule(moduleOptions) {
   const options = Object.assign(
     {},
-    this.options.svgInlineLoader,
+    this.options.vueSvgInlineLoader,
     moduleOptions
   );
 
