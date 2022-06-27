@@ -11,24 +11,20 @@ export default function vueSvgInlineLoaderModule(moduleOptions) {
 		const vueRule = config.module.rules.find(
 			({ test }) => test.toString() === /\.vue$/i.toString()
 		);
-		if (vueRule.use)
-			vueRule.use.push({
-				loader: join(__dirname, "../index.js"),
-				options,
-			});
-		else {
+		if (!vueRule.use) {
 			vueRule.use = [
 				{
 					loader: vueRule.loader,
 					options: vueRule.options,
 				},
-				{
-					loader: join(__dirname, "../index.js"),
-					options,
-				},
 			];
 			delete vueRule.loader;
 			delete vueRule.options;
 		}
+
+		vueRule.use.push({
+			loader: join(__dirname, "../index.js"),
+			options,
+		});
 	});
 }
