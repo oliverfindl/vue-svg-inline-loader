@@ -18,7 +18,6 @@ export default function vueSvgInlineLoaderModule(moduleOptions) {
 			},
 			{
 				loader: join(__dirname, "../index.js"),
-				loader: "vue-svg-inline-loader",
 				options,
 			},
 		];
