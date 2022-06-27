@@ -30,7 +30,7 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // 'vue-svg-inline-loader/nuxt' // in a real project
-    '@/modules/vue-svg-inline-loader' // for this demo
+    join(__dirname, "../../nuxt/index.js") // for this demo
   ],
 
   vueSvgInlineLoader: {
