@@ -11,5 +11,4 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.md]
-indent_style = space
 trim_trailing_whitespace = false
