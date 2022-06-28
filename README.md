@@ -23,6 +23,8 @@
 
 ## Notable changes
 
+* v2.1.4
+	* Added Nuxt module
 * v2.1.0
 	* Added new option: [cloneAttributes](#configuration)
 * v2.0.0
@@ -135,10 +137,10 @@ With [nuxt](https://nuxtjs.org/) - [nuxt.config.js](https://nuxtjs.org/faq/exten
 
 module.exports = {
 	buildModules: [ 
-		['vue-svg-inline-loader/nuxt', { /* options */ }]
+		[ "vue-svg-inline-loader/nuxt", { /* options */ } ]
 	],
 	// or
-	buildModules: ['vue-svg-inline-loader/nuxt'],
+	buildModules: [ "vue-svg-inline-loader/nuxt" ],
 	vueSvgInlineLoader: {
 		/* options */
 	}
@@ -257,14 +259,14 @@ Default options:
 ```
 Explanation:
 * **inline.keyword:**  
-Defines keyword, which marks images you want to replace with inline SVG. Keyword has to be wrapped with whitespace characters (e.g. space). 
+Defines keyword, which marks images you want to replace with inline SVG. Keyword has to be wrapped with whitespace characters (e.g. space).
 In case of some conflicts, you can also use data version of your keyword (e.g. `data-keyword`).
 
 * **inline.strict:**  
 In strict mode loader replaces only images with defined keyword. If strict mode is disabled, loader replaces all images.
 
 * **sprite.keyword:**  
-Defines keyword, which marks images you want to replace with inline SVG using inline sprites. Keyword has to be wrapped with whitespace characters (e.g. space). 
+Defines keyword, which marks images you want to replace with inline SVG using inline sprites. Keyword has to be wrapped with whitespace characters (e.g. space).
 In case of some conflicts, you can also use data version of your keyword (e.g. `data-keyword`).
 
 * **sprite.strict:**  
