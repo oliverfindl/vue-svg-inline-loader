@@ -1,3 +1,5 @@
+"use strict";
+
 const { join } = require("path");
 
 export default function vueSvgInlineLoaderModule(moduleOptions) {
@@ -11,6 +13,7 @@ export default function vueSvgInlineLoaderModule(moduleOptions) {
 		const vueRule = config.module.rules.find(
 			({ test }) => test.toString() === /\.vue$/i.toString()
 		);
+
 		if (!vueRule.use) {
 			vueRule.use = [
 				{
