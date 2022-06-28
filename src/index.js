@@ -90,23 +90,23 @@ const DEFAULT_OPTIONS_SCHEMA = freeze({
 	additionalProperties: false
 });
 
-/* define all regular expression patterns */
-// const PATTERN_INLINE_KEYWORD; // will be defined dynamically based on keyword from options
-// const PATTERN_SPRITE_KEYWORD; // will be defined dynamically based on keyword from options
-const PATTERN_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
-const PATTERN_BEFORE_ROOT_CLOSE_TAG = /(<template[^>]*>[\s\S]+)(\s*<\/[^>]+>[\s\S]*<\/template>)/i;
-const PATTERN_IMAGE_SRC_SVG = /(["']|#|`{3})?<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>(["']|#|`{3})?/gi;
-// const PATTERN_SVG_WHITESPACE = /((?:\r?\n)+|\t+|  +)/g;
-// const PATTERN_SVG_WHITESPACE_TAGS = />\s+</g;
-const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
-const PATTERN_SVG_TITLE = /<svg[^>]*>[\s\S]*(<title>[\s\S]*<\/title>)[\s\S]*<\/svg>/i;
-const PATTERN_SVG_TAG = /^<svg[^>]*/i;
-const PATTERN_USE_TAG = /<use[^>]*/i;
-const PATTERN_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
-const PATTERN_ATTRIBUTE_NAME = /^[:@]?[a-z](?:[a-z0-9-:.]*[a-z0-9])?$/i;
-const PATTERN_ATTRIBUTE_NAME_VUE = /^([:@]|v-).+$/i;
-const PATTERN_TAG = /^<|>$/;
-const PATTERN_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
+/* define all regular expressions */
+// const REGEXP_INLINE_KEYWORD; // will be defined dynamically based on keyword from options
+// const REGEXP_SPRITE_KEYWORD; // will be defined dynamically based on keyword from options
+const REGEXP_VUE_SFC_HTML = /^\s*<template(?:\s+[^>]*lang[\s="']+html["'][^>]*)?>\s*/i;
+const REGEXP_BEFORE_ROOT_CLOSE_TAG = /(<template[^>]*>[\s\S]+)(\s*<\/[^>]+>[\s\S]*<\/template>)/i;
+const REGEXP_IMAGE_SRC_SVG = /(["']|#|`{3})?<img\s+[^>]*src[\s="']+([^"']+\.svg)(?:[?#][^"']*)?["'][^>]*\/?>(["']|#|`{3})?/gi;
+// const REGEXP_SVG_WHITESPACE = /((?:\r?\n)+|\t+|  +)/g;
+// const REGEXP_SVG_WHITESPACE_TAGS = />\s+</g;
+const REGEXP_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
+const REGEXP_SVG_TITLE = /<svg[^>]*>[\s\S]*(<title>[\s\S]*<\/title>)[\s\S]*<\/svg>/i;
+const REGEXP_SVG_TAG = /^<svg[^>]*/i;
+const REGEXP_USE_TAG = /<use[^>]*/i;
+const REGEXP_ATTRIBUTES = /\s*([:@]?[^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
+const REGEXP_ATTRIBUTE_NAME = /^[:@]?[a-z](?:[a-z0-9-:.]*[a-z0-9])?$/i;
+const REGEXP_ATTRIBUTE_NAME_VUE = /^([:@]|v-).+$/i;
+const REGEXP_TAG = /^<|>$/;
+const REGEXP_DEPRECATED_OPTION = /^(inline|sprite)(keyword|strict)$/i;
 
 /* export loader */
 module.exports = function(content) {
@@ -121,9 +121,9 @@ module.exports = function(content) {
 	const loaderOptions = getOptions(this) || {};
 	const loaderOptionsPropNames = Object.getOwnPropertyNames(loaderOptions);
 	for(const name of loaderOptionsPropNames) {
-		if(PATTERN_DEPRECATED_OPTION.test(name)) {
+		if(REGEXP_DEPRECATED_OPTION.test(name)) {
 			const value = loaderOptions[name];
-			const matches = name.toLowerCase().match(PATTERN_DEPRECATED_OPTION);
+			const matches = name.toLowerCase().match(REGEXP_DEPRECATED_OPTION);
 			merge(loaderOptions, {
 				arrayConcat: false,
 				arrayUnique: false,
@@ -159,16 +159,16 @@ module.exports = function(content) {
 	options._svgo = !!options.svgo;
 
 	/* check if sprites can be used */
-	options._sprites = !!(path.extname(this.resourcePath).toLowerCase() === ".vue" && PATTERN_VUE_SFC_HTML.test(content));
+	options._sprites = !!(path.extname(this.resourcePath).toLowerCase() === ".vue" && REGEXP_VUE_SFC_HTML.test(content));
 
-	/* validate keywords and define regular expression patterns */
+	/* validate keywords and define regular expression */
 	for(const keyword of [options.inline.keyword, options.sprite.keyword]) {
-		if(!PATTERN_ATTRIBUTE_NAME.test(keyword)) {
+		if(!REGEXP_ATTRIBUTE_NAME.test(keyword)) {
 			throw new Error(`Keyword ${keyword} is not valid.`);
 		}
 	}
-	const PATTERN_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?(?:v-)?${options.inline.keyword}\\s+`, "i");
-	const PATTERN_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?(?:v-)?${options.sprite.keyword}\\s+`, "i");
+	const REGEXP_INLINE_KEYWORD = new RegExp(`\\s+(?:data-)?(?:v-)?${options.inline.keyword}\\s+`, "i");
+	const REGEXP_SPRITE_KEYWORD = new RegExp(`\\s+(?:data-)?(?:v-)?${options.sprite.keyword}\\s+`, "i");
 
 	/* initialize svgo */
 	const svgo = options._svgo && new SVGO(options.svgo === true ? DEFAULT_OPTIONS.svgo : options.svgo);
@@ -177,7 +177,7 @@ module.exports = function(content) {
 	const symbols = new Set();
 
 	/* async replace */
-	replace(content, PATTERN_IMAGE_SRC_SVG, async (image, leftQuote, source, rightQuote) => {
+	replace(content, REGEXP_IMAGE_SRC_SVG, async (image, leftQuote, source, rightQuote) => {
 
 		/* check if quotes match */
 		const quotesMatch = leftQuote && rightQuote && leftQuote === rightQuote;
@@ -188,7 +188,7 @@ module.exports = function(content) {
 		}
 
 		/* check for keyword in strict mode */
-		if(options.inline.strict && !PATTERN_INLINE_KEYWORD.test(image)) {
+		if(options.inline.strict && !REGEXP_INLINE_KEYWORD.test(image)) {
 			return image;
 		}
 
@@ -225,7 +225,7 @@ module.exports = function(content) {
 		}
 
 		/* check if svg content is not empty */
-		if(!PATTERN_SVG_CONTENT.test(file.content)) {
+		if(!REGEXP_SVG_CONTENT.test(file.content)) {
 			throw new Error(`File ${file.path} is empty.`);
 		}
 
@@ -237,15 +237,15 @@ module.exports = function(content) {
 		}
 
 		/* remove unnecessary whispace from svg */
-		// file.content = file.content.replace(PATTERN_SVG_WHITESPACE, " ").replace(PATTERN_SVG_WHITESPACE_TAGS, "><").trim();
+		// file.content = file.content.replace(REGEXP_SVG_WHITESPACE, " ").replace(REGEXP_SVG_WHITESPACE_TAGS, "><").trim();
 
 		/* create attributes map */
 		const attributes = createAttributeMap(image);
 
 		/* handle svg as sprite or transform alt attribute to title tag if enabled in options */
-		if(!options.sprite.strict || PATTERN_SPRITE_KEYWORD.test(image)) {
-			if(options._sprites && !PATTERN_USE_TAG.test(file.content)) {
-				file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars, require-atomic-updates
+		if(!options.sprite.strict || REGEXP_SPRITE_KEYWORD.test(image)) {
+			if(options._sprites && !REGEXP_USE_TAG.test(file.content)) {
+				file.content = file.content.replace(REGEXP_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars, require-atomic-updates
 
 					/* create unique id for svg based on svg file path */
 					const developmentId = [this.resourcePath, file.path].map(path => path.replace(this.rootContext, "")).join(":");
@@ -264,7 +264,7 @@ module.exports = function(content) {
 			}
 		} else if(options.addTitle && attributes.has("alt")) {
 			const alternativeTitle = attributes.get("alt");
-			file.content = PATTERN_SVG_TITLE.test(file.content) ? file.content.replace(PATTERN_SVG_TITLE, (svg, title) => svg.replace(title, `<title>${alternativeTitle}</title>`)) : file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => svg.replace(symbol, `<title>${alternativeTitle}</title>${symbol}`)); // eslint-disable-line no-unused-vars, require-atomic-updates
+			file.content = REGEXP_SVG_TITLE.test(file.content) ? file.content.replace(REGEXP_SVG_TITLE, (svg, title) => svg.replace(title, `<title>${alternativeTitle}</title>`)) : file.content.replace(REGEXP_SVG_CONTENT, (svg, attributes, symbol) => svg.replace(symbol, `<title>${alternativeTitle}</title>${symbol}`)); // eslint-disable-line no-unused-vars, require-atomic-updates
 		}
 
 		/* add attributes if not present */
@@ -293,12 +293,12 @@ module.exports = function(content) {
 		}
 
 		/* inject attributes as Vue bindings to file content if available */
-		file.content = (leftQuote || "") + (attributes.size ? file.content.replace(PATTERN_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => {
+		file.content = (leftQuote || "") + (attributes.size ? file.content.replace(REGEXP_SVG_TAG, "$& " + [...attributes.keys()].map(attribute => {
 			let name = attribute;
 			let value = attributes.get(attribute);
 
 			value = (value ? value : (options.xhtml ? name : "")).replace(/"/g, "'");
-			if(options.transformImageAttributesToVueDirectives && !PATTERN_ATTRIBUTE_NAME_VUE.test(name)) {
+			if(options.transformImageAttributesToVueDirectives && !REGEXP_ATTRIBUTE_NAME_VUE.test(name)) {
 				name = `v-bind:${name}`;
 				value = `'${value}'`;
 			}
@@ -318,7 +318,7 @@ module.exports = function(content) {
 	}).then(content => {
 
 		/* inject symbols into file content if available and return it */
-		return callback(null, options._sprites && symbols.size ? content.replace(PATTERN_BEFORE_ROOT_CLOSE_TAG, `$1<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">${[...symbols].join("")}</svg>$2`) : content);
+		return callback(null, options._sprites && symbols.size ? content.replace(REGEXP_BEFORE_ROOT_CLOSE_TAG, `$1<svg xmlns="http://www.w3.org/2000/svg" style="display: none !important;">${[...symbols].join("")}</svg>$2`) : content);
 
 	}).catch(error => {
 
@@ -352,12 +352,12 @@ function createAttributeMap(string) {
 
 	/* parse attributes into attribute map */
 	let attribute;
-	PATTERN_ATTRIBUTES.lastIndex = 0;
-	while(attribute = PATTERN_ATTRIBUTES.exec(string)) { // eslint-disable-line no-cond-assign
-		if(attribute.index === PATTERN_ATTRIBUTES.lastIndex) {
-			PATTERN_ATTRIBUTES.lastIndex++;
+	REGEXP_ATTRIBUTES.lastIndex = 0;
+	while(attribute = REGEXP_ATTRIBUTES.exec(string)) { // eslint-disable-line no-cond-assign
+		if(attribute.index === REGEXP_ATTRIBUTES.lastIndex) {
+			REGEXP_ATTRIBUTES.lastIndex++;
 		}
-		if(attribute[1] && !PATTERN_TAG.test(attribute[1]) && PATTERN_ATTRIBUTE_NAME.test(attribute[1])) {
+		if(attribute[1] && !REGEXP_TAG.test(attribute[1]) && REGEXP_ATTRIBUTE_NAME.test(attribute[1])) {
 			attributes.set(attribute[1].toLowerCase(), attribute[2] || attribute[3] || "");
 		}
 	}
