@@ -5,7 +5,8 @@
 	"main": "src/index.js",
 	"files": [
 		"*.js",
-		"src/*.js"
+		"src/*.js",
+		"nuxt/*.js"
 	],
 	"directories": {
 		"example": "examples"
